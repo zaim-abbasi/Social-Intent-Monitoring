@@ -1,0 +1,70 @@
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/outfit/700.css';
+@import '@fontsource/outfit/800.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Outfit', system-ui, sans-serif;
+}
+
+body {
+  @apply bg-light text-dark font-sans antialiased;
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.glass-effect {
+  @apply backdrop-blur-md bg-white/80;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-secondary text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:shadow-glow;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-primary border border-primary/20 font-semibold px-6 py-3 rounded-lg transition-all duration-300;
+  }
+  
+  .card {
+    @apply bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300;
+  }
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+  z-index: 1000;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content {
+  @apply outline-none;
+}
