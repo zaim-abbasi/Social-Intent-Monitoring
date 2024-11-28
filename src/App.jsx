@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthProvider } from './components/Auth/AuthContext';
 import Navbar from './components/Header/Navbar';
 import HeroSection from './components/Hero/HeroSection';
 import FeaturesSection from './components/Features/FeaturesSection';
@@ -9,14 +10,16 @@ import './App.css';
 
 function App() {
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <HeroSection />
-      <FeaturesSection />
-      <UseCasesSection />
-      <PricingSection />
-      <ResourcesSection />
-    </div>
+    <AuthProvider>
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <HeroSection />
+        <FeaturesSection />
+        <UseCasesSection />
+        <PricingSection />
+        <ResourcesSection />
+      </div>
+    </AuthProvider>
   );
 }
 
