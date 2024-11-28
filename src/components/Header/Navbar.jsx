@@ -25,24 +25,30 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-display font-bold gradient-text">Trend</div>
+          <div className="text-3xl md:text-4xl font-display font-extrabold gradient-text tracking-tight">
+            Trend
+          </div>
           
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="hover:text-primary transition-colors">Home</a>
-            <a href="#features" className="hover:text-primary transition-colors">Features</a>
-            <a href="#use-cases" className="hover:text-primary transition-colors">Use Cases</a>
-            <a href="#pricing" className="hover:text-primary transition-colors">Pricing</a>
-            <a href="#resources" className="hover:text-primary transition-colors">Resources</a>
+          <div className="hidden md:flex items-center space-x-10">
+            {['Home', 'Features', 'Use Cases', 'Pricing', 'Resources'].map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase().replace(' ', '-')}`}
+                className="text-gray-700 hover:text-primary font-medium transition-colors duration-200 text-lg tracking-wide"
+              >
+                {item}
+              </a>
+            ))}
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
             <button
               onClick={() => setShowLoginModal(true)}
-              className="btn-secondary"
+              className="btn-secondary text-lg font-medium hover:scale-105 transition-transform duration-200"
             >
               Login
             </button>
-            <button className="btn-primary">
+            <button className="btn-primary text-lg font-medium hover:scale-105 transition-transform duration-200">
               Get Started
             </button>
           </div>
