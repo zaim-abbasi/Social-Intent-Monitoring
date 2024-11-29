@@ -6,6 +6,7 @@ import BasicInfoStep from './steps/BasicInfoStep';
 import KeywordStep from './steps/KeywordStep';
 import PlatformStep from './steps/PlatformStep';
 import TeamStep from './steps/TeamStep';
+import ProgressBar from './components/ProgressBar';
 
 const SignupForm = ({ onClose }) => {
   const { step, formData, nextStep, prevStep, updateFormData } = useMultiStepForm({
@@ -43,30 +44,38 @@ const SignupForm = ({ onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <AnimatePresence mode="wait" initial={false}>
-        {renderStep()}
-      </AnimatePresence>
+    <div className="h-full flex flex-col">
+      <ProgressBar currentStep={step} totalSteps={4} />
+      
+      <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
+        <div className="flex-1">
+          <AnimatePresence mode="wait" initial={false}>
+            {renderStep()}
+          </AnimatePresence>
+        </div>
 
-      <div className="flex justify-between">
-        {step > 1 && (
+        <div className="flex justify-between mt-8">
+          {step > 1 && (
+            <button
+              type="button"
+              onClick={prevStep}
+              className="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-700"
+            >
+              Back
+            </button>
+          )}
           <button
-            type="button"
-            onClick={prevStep}
-            className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            type="submit"
+            disabled={isSubmitting}
+            className={`px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+              step === 1 ? 'w-full' : 'ml-auto'
+            }`}
           >
-            Back
+            {step === 4 ? (isSubmitting ? 'Creating Account...' : 'Create Account') : 'Next'}
           </button>
-        )}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors ml-auto"
-        >
-          {step === 4 ? (isSubmitting ? 'Creating Account...' : 'Create Account') : 'Next'}
-        </button>
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   );
 };
 
