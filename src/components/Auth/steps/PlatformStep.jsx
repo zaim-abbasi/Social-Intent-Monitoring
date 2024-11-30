@@ -15,14 +15,14 @@ const PlatformStep = ({ formData, updateFormData }) => {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className="h-[420px] flex flex-col"
+      className="h-full flex flex-col"
     >
       <div className="text-center mb-6">
         <h3 className="text-2xl font-bold text-gray-900">Choose Platforms</h3>
-        <p className="text-gray-600 mt-2">Select platforms to monitor</p>
+        <p className="text-gray-600 mt-2">Select the platforms you want to monitor</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 overflow-y-auto pr-2">
         <PlatformSelector
           selected={formData.platforms}
           onSelect={handlePlatformSelect}

@@ -33,22 +33,20 @@ body {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary;
 }
 
+/* Remove scrollbars but keep functionality */
 .custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  display: none;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(99, 102, 241, 0.3);
-  border-radius: 3px;
+/* Modern form styling */
+input:focus, textarea:focus {
+  @apply ring-2 ring-primary/30 border-primary outline-none;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
 @layer components {

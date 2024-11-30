@@ -11,103 +11,84 @@ const platforms = [
     id: 'linkedin', 
     name: 'LinkedIn', 
     icon: FaLinkedin, 
-    type: 'Free API',
-    description: 'Professional networking platform'
+    description: 'Professional networking'
   },
   { 
     id: 'twitter', 
     name: 'Twitter', 
     icon: FaTwitter, 
-    type: 'Paid API',
-    description: 'Real-time social conversations'
+    description: 'Real-time conversations'
   },
   { 
     id: 'github', 
     name: 'GitHub', 
     icon: FaGithub, 
-    type: 'Free API',
-    description: 'Developer community platform'
+    description: 'Developer community'
   },
   { 
     id: 'medium', 
     name: 'Medium', 
     icon: FaMedium, 
-    type: 'Limited API',
-    description: 'Professional content platform'
+    description: 'Professional content'
   },
   { 
     id: 'reddit', 
     name: 'Reddit', 
     icon: FaReddit, 
-    type: 'Free API',
-    description: 'Community discussions platform'
+    description: 'Community discussions'
   },
   { 
     id: 'stackoverflow', 
     name: 'Stack Overflow', 
     icon: FaStackOverflow, 
-    type: 'Free API',
-    description: 'Developer Q&A platform'
+    description: 'Developer Q&A'
   },
   { 
     id: 'youtube', 
     name: 'YouTube', 
     icon: FaYoutube, 
-    type: 'Free API',
-    description: 'Video content platform'
+    description: 'Video content'
   },
   { 
     id: 'instagram', 
     name: 'Instagram', 
     icon: FaInstagram, 
-    type: 'Paid API',
-    description: 'Visual content platform'
+    description: 'Visual content'
   },
   { 
     id: 'discord', 
     name: 'Discord', 
     icon: FaDiscord, 
-    type: 'Free API',
-    description: 'Community chat platform'
+    description: 'Community chat'
   },
   { 
     id: 'slack', 
     name: 'Slack', 
     icon: FaSlack, 
-    type: 'Paid API',
-    description: 'Business communication platform'
+    description: 'Business communication'
   }
 ];
 
 const PlatformSelector = ({ selected, onSelect }) => {
   return (
-    <div className="grid grid-cols-2 gap-4">
-      {platforms.map(({ id, name, icon: Icon, type, description }) => (
+    <div className="grid grid-cols-2 gap-3">
+      {platforms.map(({ id, name, icon: Icon, description }) => (
         <motion.button
           key={id}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onSelect(id)}
-          className={`p-4 rounded-lg border-2 flex flex-col items-start space-y-2 transition-all ${
+          className={`p-3 rounded-lg border-2 flex items-center space-x-3 transition-all ${
             selected.includes(id)
               ? 'border-primary bg-primary/5 text-primary'
               : 'border-gray-200 hover:border-primary/30'
           }`}
         >
-          <div className="flex items-center space-x-3 w-full">
-            <Icon className="text-xl" />
-            <span className="font-medium">{name}</span>
-            <span className={`ml-auto text-xs px-2 py-1 rounded-full ${
-              type === 'Free API' 
-                ? 'bg-green-100 text-green-700'
-                : type === 'Paid API'
-                ? 'bg-purple-100 text-purple-700'
-                : 'bg-yellow-100 text-yellow-700'
-            }`}>
-              {type}
-            </span>
+          <Icon className="text-xl flex-shrink-0" />
+          <div className="text-left">
+            <p className="font-medium text-sm">{name}</p>
+            <p className="text-xs text-gray-500">{description}</p>
           </div>
-          <p className="text-sm text-gray-600 text-left">{description}</p>
         </motion.button>
       ))}
     </div>
