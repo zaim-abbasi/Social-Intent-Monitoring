@@ -13,21 +13,21 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'login' }) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-md min-h-[600px] shadow-2xl"
+      className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl"
       overlayClassName="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
     >
-      <div className="relative h-full">
+      <div className="h-full flex flex-col">
         <button
           onClick={onClose}
-          className="absolute right-0 top-0 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-all"
+          className="absolute right-4 top-4 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-all"
         >
-          <XMarkIcon className="w-6 h-6" />
+          <XMarkIcon className="w-5 h-5" />
         </button>
 
         <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
-          <Tab.List className="flex space-x-4 border-b mb-8">
+          <Tab.List className="flex space-x-4 border-b mb-6">
             <Tab className={({ selected }) =>
-              `w-full py-4 text-base font-medium focus:outline-none border-b-2 transition-all ${
+              `w-full py-3 text-base font-medium focus:outline-none border-b-2 transition-all ${
                 selected
                   ? 'text-primary border-primary'
                   : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
@@ -36,7 +36,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'login' }) => {
               Login
             </Tab>
             <Tab className={({ selected }) =>
-              `w-full py-4 text-base font-medium focus:outline-none border-b-2 transition-all ${
+              `w-full py-3 text-base font-medium focus:outline-none border-b-2 transition-all ${
                 selected
                   ? 'text-primary border-primary'
                   : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
@@ -46,7 +46,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'login' }) => {
             </Tab>
           </Tab.List>
 
-          <Tab.Panels className="h-[calc(100%-4rem)]">
+          <Tab.Panels className="flex-1">
             <AnimatePresence mode="wait">
               <Tab.Panel className="h-full">
                 <motion.div

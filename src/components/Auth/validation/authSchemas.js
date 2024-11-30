@@ -21,5 +21,13 @@ export const signupSchema = Yup.object().shape({
     .required('Password is required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Please confirm your password')
+    .required('Please confirm your password'),
+  keywords: Yup.array()
+    .min(1, 'At least one keyword is required'),
+  platforms: Yup.array()
+    .min(1, 'Please select at least one platform'),
+  teamName: Yup.string()
+    .required('Team name is required')
 });
+
+export default { loginSchema, signupSchema };
