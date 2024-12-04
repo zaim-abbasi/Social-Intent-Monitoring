@@ -1,22 +1,31 @@
 import express from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
+import cors from 'cors';
+import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
+import errorHandler from './middleware/errorHandler.js';
 
 dotenv.config();
 
-const app = express();
-
-// Connect to MongoDB
+// Connect to database
 connectDB();
+
+const app = express();
 
 // Middleware
 app.use(cors());
+app.use(helmet());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Routes
 app.use('/api/auth', authRoutes);
+
+// Error Handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

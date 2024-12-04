@@ -1,7 +1,6 @@
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useMultiStepForm } from './hooks/useMultiStepForm';
-import { useAuthForm } from './hooks/useAuthForm';
 import BasicInfoStep from './steps/BasicInfoStep';
 import KeywordStep from './steps/KeywordStep';
 import PlatformStep from './steps/PlatformStep';
@@ -9,8 +8,12 @@ import TeamStep from './steps/TeamStep';
 import ProgressBar from './components/ProgressBar';
 import { Formik, Form } from 'formik';
 import { signupSchema } from './validation/authSchemas';
+import api from '../../utils/api';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const SignupForm = ({ onClose }) => {
+  const navigate = useNavigate();
   const { step, formData, nextStep, prevStep, updateFormData } = useMultiStepForm({
     name: '',
     email: '',
@@ -18,21 +21,38 @@ const SignupForm = ({ onClose }) => {
     confirmPassword: '',
     keywords: [],
     keywordIntent: '',
-    keywordImage: null,
     platforms: [],
     teamName: '',
-    teamMembers: [],
+    teamMembers: []
   });
 
-  const { isSubmitting, handleSignup } = useAuthForm(onClose);
-
   const handleSubmit = async (values, { setSubmitting }) => {
-    if (step < 4) {
-      updateFormData(values);
-      nextStep();
-      setSubmitting(false);
-    } else {
-      await handleSignup({ ...formData, ...values });
+    const updatedValues = { ...values };
+    updateFormData(updatedValues);
+    
+    if (values._submitType === 'next') {
+      if (step < 4) {
+        nextStep();
+        setSubmitting(false);
+      } else {
+        try {
+          const response = await api.post('/auth/signup', {
+            ...formData,
+            ...updatedValues
+          });
+
+          const { token, user } = response.data;
+          localStorage.setItem('token', token);
+          
+          toast.success('Account created successfully!');
+          onClose();
+          navigate('/dashboard');
+        } catch (error) {
+          toast.error(error.response?.data?.message || 'Failed to create account');
+        } finally {
+          setSubmitting(false);
+        }
+      }
     }
   };
 
@@ -61,7 +81,7 @@ const SignupForm = ({ onClose }) => {
       <ProgressBar currentStep={step} totalSteps={4} />
       
       <Formik
-        initialValues={formData}
+        initialValues={{ ...formData, _submitType: '' }}
         validationSchema={getCurrentValidationSchema(step)}
         onSubmit={handleSubmit}
         enableReinitialize
@@ -86,13 +106,14 @@ const SignupForm = ({ onClose }) => {
               )}
               <button
                 type="submit"
+                onClick={() => formikProps.setFieldValue('_submitType', 'next')}
                 disabled={!formikProps.isValid || formikProps.isSubmitting}
                 className={`px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                   step === 1 ? 'w-full' : 'ml-auto'
                 }`}
               >
                 {step === 4 
-                  ? (isSubmitting ? 'Creating Account...' : 'Create Account') 
+                  ? (formikProps.isSubmitting ? 'Creating Account...' : 'Create Account') 
                   : 'Next'}
               </button>
             </div>
