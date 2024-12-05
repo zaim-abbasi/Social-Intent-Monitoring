@@ -14,15 +14,15 @@ const generateToken = (userId) => {
 // @access  Public
 export const signup = async (req, res) => {
   try {
-    const { 
-      email, 
-      name, 
-      password, 
-      keywords, 
-      keywordIntent, 
-      platforms, 
-      teamName, 
-      teamMembers 
+    const {
+      email,
+      name,
+      password,
+      keywords,
+      keywordIntent,
+      platforms,
+      teamName,
+      teamMembers
     } = req.body;
 
     // Check if user exists
@@ -31,51 +31,49 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Create team first
-    const team = await Team.create({
-      name: teamName,
-      members: teamMembers.map(email => ({ email }))
-    });
-
-    // Format keywords and platforms
+    // Create user first
     const formattedKeywords = keywords.map(text => ({ text }));
     const formattedPlatforms = platforms.map(name => ({ name }));
 
-    // Create user with team reference
     const user = await User.create({
       name,
       email,
       password,
       keywords: formattedKeywords,
       keywordIntent,
-      platforms: formattedPlatforms,
-      team: team._id
+      platforms: formattedPlatforms
     });
 
-    // Update team with owner reference
-    team.owner = user._id;
-    await team.save();
+    // Create team with user as owner
+    const team = await Team.create({
+      name: teamName,
+      owner: user._id,
+      members: teamMembers.map(email => ({ email }))
+    });
 
-    if (user) {
-      const token = generateToken(user._id);
-      res.status(201).json({
-        token,
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          keywords: user.keywords,
-          keywordIntent: user.keywordIntent,
-          platforms: user.platforms,
-          team: {
-            id: team._id,
-            name: team.name,
-            members: team.members
-          }
+    // Update user with team reference
+    user.team = team._id;
+    await user.save();
+
+    const token = generateToken(user._id);
+    res.status(201).json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        keywords: user.keywords,
+        keywordIntent: user.keywordIntent,
+        platforms: user.platforms,
+        team: {
+          id: team._id,
+          name: team.name,
+          members: team.members
         }
-      });
-    }
+      }
+    });
   } catch (error) {
+    console.error('Signup error:', error);
     res.status(400).json({ message: error.message });
   }
 };
