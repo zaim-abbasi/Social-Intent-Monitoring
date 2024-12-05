@@ -1,11 +1,11 @@
 import express from 'express';
-import { signup, login, getProfile } from '../controllers/authController.js';
+import { login, verifyToken } from '../controllers/authController.js';
+import { loginValidator } from '../validators/authValidators.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/signup', signup);
-router.post('/login', login);
-router.get('/profile', protect, getProfile);
+router.post('/login', loginValidator, login);
+router.get('/verify', protect, verifyToken);
 
 export default router;
