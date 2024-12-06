@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { loginSchema } from './validation/authSchemas';
 import { useAuthForm } from './hooks/useAuthForm';
 import FormInput from './components/FormInput';
@@ -43,14 +43,16 @@ const LoginForm = ({ onClose }) => {
       >
         {({ errors, touched }) => (
           <Form className="space-y-3">
-            <FormInput
+            <Field
+              as={FormInput}
               name="email"
               type="email"
               placeholder="Enter your email"
               error={errors.email}
               touched={touched.email}
             />
-            <FormInput
+            <Field
+              as={FormInput}
               name="password"
               type="password"
               placeholder="Enter your password"
