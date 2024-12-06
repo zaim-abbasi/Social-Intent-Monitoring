@@ -10,6 +10,8 @@ import ResourcesSection from './components/Resources/ResourcesSection';
 import Dashboard from './pages/Dashboard';
 import './App.css';
 
+// this is my main file
+
 function App() {
   return (
     <Router>
