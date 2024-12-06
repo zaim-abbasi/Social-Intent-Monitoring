@@ -1,13 +1,38 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import { loginSchema } from './validation/authSchemas';
-import { useAuthForm } from './hooks/useAuthForm';
 import FormInput from './components/FormInput';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
+import { toast } from 'react-hot-toast';
+import api from '../../utils/api';
+import { useAuth } from './AuthContext';
 
 const LoginForm = ({ onClose }) => {
-  const { isSubmitting, handleLogin } = useAuthForm(onClose);
+  const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const handleSubmit = async (values) => {
+    setIsSubmitting(true);
+    try {
+      const response = await api.post('/auth/login', values);
+      const { token, user } = response.data;
+      
+      // Store token and update auth context
+      localStorage.setItem('token', token);
+      await authLogin(user);
+      
+      toast.success('Successfully logged in!');
+      onClose();
+      navigate('/dashboard');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to login');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -39,21 +64,23 @@ const LoginForm = ({ onClose }) => {
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={loginSchema}
-        onSubmit={handleLogin}
+        onSubmit={handleSubmit}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, isValid }) => (
           <Form className="space-y-3">
-            <FormInput
+            <Field
               name="email"
               type="email"
               placeholder="Enter your email"
+              component={FormInput}
               error={errors.email}
               touched={touched.email}
             />
-            <FormInput
+            <Field
               name="password"
               type="password"
               placeholder="Enter your password"
+              component={FormInput}
               error={errors.password}
               touched={touched.password}
             />
@@ -74,7 +101,7 @@ const LoginForm = ({ onClose }) => {
             </div>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={!isValid || isSubmitting}
               className="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Signing in...' : 'Sign in'}
