@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import Team from '../models/Team.js';
-import { comparePasswords, generateToken, sanitizeUser } from '../utils/authUtils.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 export class AuthService {
   static async loginUser(email, password) {
@@ -10,7 +11,7 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
 
-    const isPasswordValid = await comparePasswords(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new Error('Invalid credentials');
     }
@@ -18,8 +19,25 @@ export class AuthService {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = generateToken(user._id);
-    const sanitizedUser = sanitizeUser(user);
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '30d' }
+    );
+
+    const sanitizedUser = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      keywords: user.keywords,
+      keywordIntent: user.keywordIntent,
+      platforms: user.platforms,
+      team: user.team ? {
+        id: user.team._id,
+        name: user.team.name,
+        members: user.team.members
+      } : null
+    };
 
     return { token, user: sanitizedUser };
   }
@@ -27,13 +45,11 @@ export class AuthService {
   static async createUser(userData) {
     const { name, email, password, keywords = [], keywordIntent = '', platforms = [], teamName, teamMembers = [] } = userData;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new Error('User with this email already exists');
     }
 
-    // Create user
     const user = await User.create({
       name,
       email,
@@ -43,7 +59,6 @@ export class AuthService {
       platforms: platforms.map(p => ({ name: p }))
     });
 
-    // Create team if teamName is provided
     if (teamName) {
       const team = await Team.create({
         name: teamName,
@@ -55,9 +70,26 @@ export class AuthService {
       await user.save();
     }
 
-    const token = generateToken(user._id);
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '30d' }
+    );
+
     const createdUser = await User.findById(user._id).populate('team');
-    const sanitizedUser = sanitizeUser(createdUser);
+    const sanitizedUser = {
+      id: createdUser._id,
+      name: createdUser.name,
+      email: createdUser.email,
+      keywords: createdUser.keywords,
+      keywordIntent: createdUser.keywordIntent,
+      platforms: createdUser.platforms,
+      team: createdUser.team ? {
+        id: createdUser.team._id,
+        name: createdUser.team.name,
+        members: createdUser.team.members
+      } : null
+    };
 
     return { token, user: sanitizedUser };
   }
@@ -69,6 +101,18 @@ export class AuthService {
       throw new Error('User not found');
     }
 
-    return sanitizeUser(user);
+    return {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      keywords: user.keywords,
+      keywordIntent: user.keywordIntent,
+      platforms: user.platforms,
+      team: user.team ? {
+        id: user.team._id,
+        name: user.team.name,
+        members: user.team.members
+      } : null
+    };
   }
 }
