@@ -25,7 +25,7 @@ const HeroSection = () => {
                 Introducing Social Intent Monitoring
               </span>
               <h1 className="text-6xl md:text-8xl font-display font-bold mb-8 leading-tight">
-                Discover Social{' '}
+                Discover {' '}
                 <span className="gradient-text">Trends</span>{' '}
                 That Matter
               </h1>

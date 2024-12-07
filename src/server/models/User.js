@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Team'
   },
+  trialStartDate: {
+    type: Date,
+    default: Date.now
+  },
   lastLogin: {
     type: Date
   }
@@ -80,6 +84,17 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
   } catch (error) {
     throw error;
   }
+};
+
+// Get trial days remaining
+userSchema.methods.getTrialDaysRemaining = function() {
+  const trialDuration = 7; // 7 days trial
+  const now = new Date();
+  const trialEnd = new Date(this.trialStartDate);
+  trialEnd.setDate(trialEnd.getDate() + trialDuration);
+  
+  const daysRemaining = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
+  return Math.max(0, daysRemaining);
 };
 
 const User = mongoose.model('User', userSchema);
