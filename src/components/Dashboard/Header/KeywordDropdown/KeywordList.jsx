@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX } from 'react-icons/fi';
 
-const KeywordList = ({ keywords, searchTerm, onRemove }) => {
+const KeywordList = ({ keywords, searchTerm }) => {
   const filteredKeywords = keywords.filter(keyword =>
     keyword.text.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -19,12 +18,6 @@ const KeywordList = ({ keywords, searchTerm, onRemove }) => {
             className="px-4 py-2 hover:bg-gray-50 flex items-center justify-between group"
           >
             <span className="text-sm text-gray-700">{keyword.text}</span>
-            <button
-              onClick={() => onRemove(keyword._id)}
-              className="text-gray-400 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-all"
-            >
-              <FiX className="w-4 h-4" />
-            </button>
           </motion.div>
         ))}
         {filteredKeywords.length === 0 && (
