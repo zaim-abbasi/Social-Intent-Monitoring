@@ -16,6 +16,7 @@ export const login = async (req, res) => {
 
     res.json({ token, user });
   } catch (error) {
+    console.error('Login error:', error);
     const statusCode = error.message === 'Invalid credentials' ? 401 : 500;
     res.status(statusCode).json({ 
       message: error.message || 'An error occurred during login' 

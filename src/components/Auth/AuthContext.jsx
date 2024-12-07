@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       // Verify token and get user data
-      axios.get('/api/auth/verify')
+      axios.get('http://localhost:5000/api/auth/verify')
         .then(response => {
           setUser(response.data.user);
         })
@@ -28,18 +28,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async (credentials) => {
-    const response = await axios.post('/api/auth/login', credentials);
-    const { token, user } = response.data;
+  const login = async ({ token, user }) => {
     localStorage.setItem('token', token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     setUser(user);
     return user;
   };
 
-  const signup = async (userData) => {
-    const response = await axios.post('/api/auth/signup', userData);
-    const { token, user } = response.data;
+  const signup = async ({ token, user }) => {
     localStorage.setItem('token', token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     setUser(user);
