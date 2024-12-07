@@ -10,6 +10,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { usePlatformMentions } from '../../../hooks/usePlatformMentions';
+import { FiLoader } from 'react-icons/fi';
 
 ChartJS.register(
   CategoryScale,
@@ -26,6 +27,14 @@ const platformColors = {
   reddit: 'rgba(255, 69, 0, 0.8)',
   github: 'rgba(36, 41, 46, 0.8)',
   medium: 'rgba(0, 0, 0, 0.8)'
+};
+
+const platformLabels = {
+  linkedin: 'LinkedIn',
+  twitter: 'Twitter',
+  reddit: 'Reddit',
+  github: 'GitHub',
+  medium: 'Medium'
 };
 
 const MentionsBarChart = () => {
@@ -62,20 +71,32 @@ const MentionsBarChart = () => {
   };
 
   if (isLoading) {
-    return <div className="h-64 flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="h-64 flex items-center justify-center">
+        <FiLoader className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    );
   }
 
   if (error) {
     return (
       <div className="h-64 flex items-center justify-center text-red-500">
-        Error loading mentions data
+        {error}
+      </div>
+    );
+  }
+
+  if (!Object.keys(mentionsData).length) {
+    return (
+      <div className="h-64 flex items-center justify-center text-gray-500">
+        No platform data available
       </div>
     );
   }
 
   const data = {
     labels: Object.keys(mentionsData).map(platform => 
-      platform.charAt(0).toUpperCase() + platform.slice(1)
+      platformLabels[platform] || platform.charAt(0).toUpperCase() + platform.slice(1)
     ),
     datasets: [
       {

@@ -10,7 +10,7 @@ export const usePlatformMentions = () => {
 
   useEffect(() => {
     const fetchMentionsData = async () => {
-      if (!user?.platforms?.length) {
+      if (!user?.platforms?.length || !user?.keywords?.length) {
         setIsLoading(false);
         return;
       }

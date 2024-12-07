@@ -12,9 +12,9 @@ export class TwitterApiService {
 
   async searchMentions(keyword) {
     try {
-      const result = await this.client.v2.search({
-        query: keyword,
+      const result = await this.client.v2.search(keyword, {
         'tweet.fields': ['created_at'],
+        'start_time': new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
         max_results: 100,
       });
 

@@ -22,15 +22,21 @@ export class MentionsService {
   }
 
   async fetchPlatformMentions(platform, keywords) {
-    const mentionCounts = await Promise.all(
-      keywords.map(keyword => this.fetchMentionsForKeyword(platform, keyword))
-    );
-    
-    return Math.max(...mentionCounts);
+    try {
+      const mentionCounts = await Promise.all(
+        keywords.map(keyword => this.fetchMentionsForKeyword(platform, keyword))
+      );
+      
+      // Sum up all mentions for each keyword
+      return mentionCounts.reduce((total, count) => total + count, 0);
+    } catch (error) {
+      console.error(`Error fetching mentions for ${platform}:`, error);
+      return 0;
+    }
   }
 
   async fetchMentionsForKeyword(platform, keyword) {
-    switch (platform) {
+    switch (platform.toLowerCase()) {
       case 'linkedin':
         return await this.linkedinApi.searchMentions(keyword);
       case 'twitter':
