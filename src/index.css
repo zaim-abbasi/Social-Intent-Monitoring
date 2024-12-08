@@ -33,14 +33,32 @@ body {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary;
 }
 
-/* Remove scrollbars but keep functionality */
+/* Modern scrollbar styling */
 .custom-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(203, 213, 225, 0.4) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  display: none;
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(203, 213, 225, 0.4);
+  border-radius: 20px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(203, 213, 225, 0.6);
+}
+
+/* Hide horizontal scrollbar */
+.custom-scrollbar {
+  overflow-x: hidden;
 }
 
 /* Modern form styling */
