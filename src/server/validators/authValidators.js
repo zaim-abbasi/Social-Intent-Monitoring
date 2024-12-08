@@ -1,5 +1,6 @@
 import { body } from 'express-validator';
 
+// Path: src/server/validators/authValidators.js
 export const loginValidator = [
   body('email')
     .trim()
@@ -11,6 +12,8 @@ export const loginValidator = [
     .withMessage('Password is required')
 ];
 
+
+// Path: src/server/validators/authValidators.js
 export const signupValidator = [
   body('name')
     .trim()

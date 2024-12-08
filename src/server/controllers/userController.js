@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/authUtils.js';
 
 export const updateProfile = async (req, res) => {
+  // Update user profile
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -10,6 +11,7 @@ export const updateProfile = async (req, res) => {
     }
 
     const { name, newPassword, keywords, keywordIntent } = req.body;
+    // Validate new password
 
     // Update basic info
     if (name) user.name = name;

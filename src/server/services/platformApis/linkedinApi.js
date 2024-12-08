@@ -1,5 +1,6 @@
 import { LinkedInClient } from 'linkedin-api-client';
 
+// LinkedIn API client
 export class LinkedInApi {
   constructor() {
     this.client = new LinkedInClient({

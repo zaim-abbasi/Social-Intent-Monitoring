@@ -9,6 +9,8 @@ export const generateToken = (userId) => {
   );
 };
 
+
+// Compare this snippet from src/server/utils/authUtils.js:
 export const comparePasswords = async (candidatePassword, hashedPassword) => {
   return await bcrypt.compare(candidatePassword, hashedPassword);
 };

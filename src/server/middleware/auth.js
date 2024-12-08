@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
+// Middleware to protect routes that require authentication
 export const protect = async (req, res, next) => {
   try {
     let token;
@@ -15,6 +16,8 @@ export const protect = async (req, res, next) => {
       });
     }
 
+
+    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.userId).select('-password');
 
@@ -23,7 +26,7 @@ export const protect = async (req, res, next) => {
         message: 'User not found' 
       });
     }
-
+    // Attach the user object to the request object
     req.user = user;
     next();
   } catch (error) {

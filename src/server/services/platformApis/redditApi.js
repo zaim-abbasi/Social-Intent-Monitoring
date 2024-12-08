@@ -3,6 +3,8 @@ import { redditConfig } from '../../config/redditConfig.js';
 import { RedditMentionTransformer } from './transformers/RedditMentionTransformer.js';
 import { RedditRateLimiter } from './utils/RedditRateLimiter.js';
 
+
+// Reddit API class
 export class RedditApi {
   constructor() {
     this.client = new Snoowrap({

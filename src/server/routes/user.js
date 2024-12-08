@@ -10,6 +10,7 @@ import {
 
 const router = express.Router();
 
+// Define routes
 router.get('/trial-status', protect, getTrialStatus);
 router.get('/keywords', protect, getUserKeywords);
 router.post('/keywords', protect, addKeyword);

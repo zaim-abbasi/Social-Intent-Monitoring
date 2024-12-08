@@ -6,6 +6,7 @@ export const redditConfig = {
   
   // Subreddits to monitor
   targetSubreddits: [
+    // Add the subreddits you want to monitor here
     'technology',
     'programming',
     'webdev',

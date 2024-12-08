@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// Define the schema for the mentions collection
 const mentionSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,

@@ -1,5 +1,6 @@
 import api from '../../utils/api';
 
+// function to update the user profile
 export class ProfileService {
   static async updateProfile(userData) {
     try {

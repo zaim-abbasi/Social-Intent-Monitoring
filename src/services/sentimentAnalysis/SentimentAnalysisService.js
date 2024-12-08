@@ -3,6 +3,7 @@ import { createAnalysisPrompt } from './prompts';
 import { parseGeminiResponse, aggregateResults } from './utils';
 import { splitIntoBatches } from '../../utils/arrayUtils';
 
+// Service for analyzing the sentiment of social media posts
 export class SentimentAnalysisService {
   constructor(apiKey) {
     this.apiKey = apiKey;
@@ -11,6 +12,7 @@ export class SentimentAnalysisService {
 
   async analyzeSentiment(posts) {
     try {
+      // Split posts into batches to avoid exceeding the API's payload limit
       const batchSize = 10;
       const batches = splitIntoBatches(posts, batchSize);
       const results = [];
@@ -28,6 +30,7 @@ export class SentimentAnalysisService {
   }
 
   async processBatch(posts) {
+    // Generate a prompt for the analysis
     const prompt = createAnalysisPrompt(posts);
     
     const response = await axios.post(
@@ -44,6 +47,7 @@ export class SentimentAnalysisService {
         }
       }
     );
+    // Parse the response from the Gemini API
 
     return parseGeminiResponse(response.data);
   }

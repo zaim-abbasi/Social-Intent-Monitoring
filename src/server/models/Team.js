@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+// Define the schema for the team members
 const teamMemberSchema = new mongoose.Schema({
   email: {
     type: String,

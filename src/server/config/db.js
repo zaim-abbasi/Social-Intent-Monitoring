@@ -12,6 +12,7 @@ const connectDB = async () => {
     );
 
     const conn = await mongoose.connect(uri, {
+      // The following options are required to avoid deprecation warnings
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export class SentimentAnalysisService {
+  // Service for analyzing the sentiment of social media posts
   constructor(apiKey) {
     this.apiKey = apiKey;
     this.endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
@@ -8,6 +9,7 @@ export class SentimentAnalysisService {
 
   async analyzeSentiment(posts) {
     try {
+      // Split posts into batches to avoid exceeding the API's payload limit
       const batchSize = 10;
       const batches = this.splitIntoBatches(posts, batchSize);
       const results = [];

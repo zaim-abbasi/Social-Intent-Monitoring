@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-
+// Define the schema for the keywords collection
 const keywordSchema = new mongoose.Schema({
   text: {
     type: String,
