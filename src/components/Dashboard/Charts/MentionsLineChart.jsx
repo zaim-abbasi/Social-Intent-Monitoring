@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +11,7 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../../components/Auth/AuthContext';
 import { platformConfig } from '../../../config/platformConfig';
 import { format, subDays } from 'date-fns';
@@ -29,22 +29,22 @@ ChartJS.register(
 
 const MentionsLineChart = () => {
   const { user } = useAuth();
+  const [key, setKey] = useState(0);
 
-  const generateDateLabels = (days = 7) => {
+  const generateDateLabels = useCallback((days = 7) => {
     return Array.from({ length: days }).map((_, i) => 
       format(subDays(new Date(), days - 1 - i), 'MMM dd')
     );
-  };
+  }, []);
 
-  const generateTimelineData = () => {
+  const generateTimelineData = useCallback(() => {
     return user?.platforms?.map(platform => {
       const platformInfo = platformConfig[platform.name.toLowerCase()];
       if (!platformInfo) return null;
 
-      // Mock data - in production, this would come from your API
       const baseValue = 50;
       const data = Array.from({ length: 7 }, () => 
-        Math.floor((baseValue * 0.7) + Math.random() * (baseValue * 0.6))
+        Math.floor((baseValue * 0.4) + Math.random() * (baseValue * 1.2))
       );
 
       return {
@@ -64,7 +64,7 @@ const MentionsLineChart = () => {
         pointHoverBackgroundColor: 'white'
       };
     }).filter(Boolean);
-  };
+  }, [user]);
 
   const data = {
     labels: generateDateLabels(),
@@ -123,18 +123,21 @@ const MentionsLineChart = () => {
     scales: {
       y: {
         beginAtZero: true,
-        grid: {
-          color: 'rgba(243, 244, 246, 0.6)',
-          drawBorder: false
-        },
+        max: 100,
         ticks: {
+          stepSize: 20,
           font: {
             family: "'Plus Jakarta Sans', sans-serif",
-            size: 12
+            size: 12,
+            weight: '500'
           },
           color: '#6B7280',
           padding: 8,
           callback: (value) => `${value} mentions`
+        },
+        grid: {
+          color: 'rgba(243, 244, 246, 0.6)',
+          drawBorder: false
         },
         border: {
           display: false
@@ -148,7 +151,7 @@ const MentionsLineChart = () => {
           font: {
             family: "'Plus Jakarta Sans', sans-serif",
             size: 12,
-            weight: '500'
+            weight: '600'
           },
           color: '#374151',
           padding: 8
@@ -169,14 +172,18 @@ const MentionsLineChart = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="w-full h-[300px]"
-    >
-      <Line options={options} data={data} />
-    </motion.div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={key}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.4 }}
+        className="w-full h-[250px]"
+      >
+        <Line options={options} data={data} />
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

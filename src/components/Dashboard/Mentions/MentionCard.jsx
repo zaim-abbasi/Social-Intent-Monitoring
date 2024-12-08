@@ -1,13 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FiTwitter, FiLinkedin, FiGithub } from 'react-icons/fi';
-import { FaReddit } from 'react-icons/fa';
+import { FaReddit, FaMedium, FaStackOverflow, FaYoutube, FaInstagram, FaDiscord, FaSlack } from 'react-icons/fa';
 
 const platformIcons = {
   twitter: FiTwitter,
   linkedin: FiLinkedin,
   github: FiGithub,
-  reddit: FaReddit
+  reddit: FaReddit,
+  medium: FaMedium,
+  stackoverflow: FaStackOverflow,
+  youtube: FaYoutube,
+  instagram: FaInstagram,
+  discord: FaDiscord,
+  slack: FaSlack
 };
 
 const sentimentColors = {

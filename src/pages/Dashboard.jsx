@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { useAuth } from '../components/Auth/AuthContext';
 import { Navigate } from 'react-router-dom';
 import DashboardHeader from '../components/Dashboard/Header/DashboardHeader';
@@ -11,6 +11,16 @@ import FloatingChat from '../components/Dashboard/FloatingChat';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const [barChartKey, setBarChartKey] = useState(0);
+  const [lineChartKey, setLineChartKey] = useState(0);
+
+  const handleBarChartRefresh = useCallback(() => {
+    setBarChartKey(prev => prev + 1);
+  }, []);
+
+  const handleLineChartRefresh = useCallback(() => {
+    setLineChartKey(prev => prev + 1);
+  }, []);
 
   if (!user) {
     return <Navigate to="/" replace />;
@@ -27,15 +37,21 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <MentionsCard title="Source of Mentions">
-            <div className="h-[400px] p-4">
-              <MentionsBarChart />
+          <MentionsCard 
+            title="Source of Mentions" 
+            onRefresh={handleBarChartRefresh}
+          >
+            <div className="h-[250px] p-4">
+              <MentionsBarChart key={barChartKey} />
             </div>
           </MentionsCard>
 
-          <MentionsCard title="Mentions Evolution">
-            <div className="h-[400px] p-4">
-              <MentionsLineChart />
+          <MentionsCard 
+            title="Mentions Evolution"
+            onRefresh={handleLineChartRefresh}
+          >
+            <div className="h-[250px] p-4">
+              <MentionsLineChart key={lineChartKey} />
             </div>
           </MentionsCard>
         </div>
