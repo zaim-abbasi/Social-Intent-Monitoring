@@ -9,6 +9,11 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 const AuthModal = ({ isOpen, onClose, initialTab = 'login' }) => {
   const [selectedTab, setSelectedTab] = useState(initialTab === 'login' ? 0 : 1);
 
+  const tabPanels = [
+    { key: 'login-panel', component: LoginForm },
+    { key: 'signup-panel', component: SignupForm }
+  ];
+
   return (
     <Modal
       isOpen={isOpen}
@@ -26,48 +31,45 @@ const AuthModal = ({ isOpen, onClose, initialTab = 'login' }) => {
 
         <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
           <Tab.List className="flex space-x-4 border-b mb-6">
-            <Tab className={({ selected }) =>
-              `w-full py-3 text-base font-medium focus:outline-none border-b-2 transition-all ${
-                selected
-                  ? 'text-primary border-primary'
-                  : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
-              }`
-            }>
-              Login
-            </Tab>
-            <Tab className={({ selected }) =>
-              `w-full py-3 text-base font-medium focus:outline-none border-b-2 transition-all ${
-                selected
-                  ? 'text-primary border-primary'
-                  : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
-              }`
-            }>
-              Sign Up
-            </Tab>
+            {['Login', 'Sign Up'].map((tab, index) => (
+              <Tab
+                key={`tab-${index}`}
+                className={({ selected }) =>
+                  `w-full py-3 text-base font-medium focus:outline-none border-b-2 transition-all ${
+                    selected
+                      ? 'text-primary border-primary'
+                      : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
+                  }`
+                }
+              >
+                {tab}
+              </Tab>
+            ))}
           </Tab.List>
 
           <Tab.Panels className="flex-1">
-            <AnimatePresence mode="wait">
-              <Tab.Panel className="h-full">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
+            <AnimatePresence mode="wait" initial={false}>
+              {tabPanels.map((panel, index) => (
+                <Tab.Panel
+                  key={panel.key}
                   className="h-full"
+                  static
                 >
-                  <LoginForm onClose={onClose} />
-                </motion.div>
-              </Tab.Panel>
-              <Tab.Panel className="h-full">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="h-full"
-                >
-                  <SignupForm onClose={onClose} />
-                </motion.div>
-              </Tab.Panel>
+                  {({ selected }) => (
+                    selected && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        transition={{ duration: 0.2 }}
+                        className="h-full"
+                      >
+                        <panel.component onClose={onClose} />
+                      </motion.div>
+                    )
+                  )}
+                </Tab.Panel>
+              ))}
             </AnimatePresence>
           </Tab.Panels>
         </Tab.Group>
