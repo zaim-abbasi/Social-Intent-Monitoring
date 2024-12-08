@@ -70,8 +70,15 @@ const UseCasesSection = () => {
   };
 
   return (
-    <section id="use-cases" className="py-24 bg-[#FAFAFA]">
-      <div className="container mx-auto px-6">
+    <section id="use-cases" className="py-24 bg-[#FAFAFA] relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+        <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
@@ -82,14 +89,16 @@ const UseCasesSection = () => {
           <span className="inline-block px-4 py-2 rounded-full bg-black/5 text-black font-medium text-sm mb-6">
             Use Cases
           </span>
-          <h2 className="text-4xl font-bold mb-4 text-black">Who Can Benefit?</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-black">
+            Who Can Benefit?
+          </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Discover how different industries leverage our platform to drive growth
             and engagement.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {useCases.map((useCase, index) => (
             <motion.div
               key={index}
@@ -97,7 +106,8 @@ const UseCasesSection = () => {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               onClick={() => handleUseCaseClick(useCase)}
-              className="group relative bg-white p-8 rounded-2xl border border-black/5 hover:border-black/10 transition-all duration-300 hover:shadow-lg cursor-pointer"
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group relative bg-white p-8 rounded-2xl border border-black/5 hover:border-black/20 transition-all duration-300 hover:shadow-lg cursor-pointer"
             >
               <div className="flex items-center mb-6">
                 <div className="bg-black/5 p-4 rounded-xl transform group-hover:scale-110 transition-transform duration-300">
@@ -134,6 +144,21 @@ const UseCasesSection = () => {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-16 text-center"
+        >
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-black rounded-xl hover:bg-black/90 transition-all duration-300"
+          >
+            View All Use Cases
+          </motion.button>
+        </motion.div>
       </div>
 
       <UseCaseModal

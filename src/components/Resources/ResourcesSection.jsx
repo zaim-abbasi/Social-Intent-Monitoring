@@ -28,8 +28,15 @@ const ResourcesSection = () => {
   };
 
   return (
-    <section id="resources" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-6">
+    <section id="resources" className="py-24 bg-[#FAFAFA] relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+        <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
@@ -37,9 +44,14 @@ const ResourcesSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold mb-4">Resources & Insights</h2>
+          <span className="inline-block px-4 py-2 rounded-full bg-black/5 text-black font-medium text-sm mb-6">
+            Resources
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-black">
+            Resources & Insights
+          </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Explore our collection of guides, tutorials, and success stories.
+            Explore our collection of guides, tutorials, and success stories to help you get the most out of our platform.
           </p>
         </motion.div>
 
@@ -52,8 +64,8 @@ const ResourcesSection = () => {
                   `w-full rounded-lg py-3 text-sm font-medium leading-5 transition-all duration-300
                   ${
                     selected
-                      ? 'bg-primary text-white shadow-lg'
-                      : 'text-gray-600 hover:bg-gray-100 hover:text-primary'
+                      ? 'bg-black text-white shadow-lg'
+                      : 'text-gray-600 hover:bg-black/5 hover:text-black'
                   }`
                 }
               >
@@ -81,6 +93,21 @@ const ResourcesSection = () => {
             ))}
           </Tab.Panels>
         </Tab.Group>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-16 text-center"
+        >
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-black rounded-xl hover:bg-black/90 transition-all duration-300"
+          >
+            View All Resources
+          </motion.button>
+        </motion.div>
       </div>
     </section>
   );

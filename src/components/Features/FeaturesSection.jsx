@@ -17,49 +17,49 @@ const features = [
     icon: ChartBarIcon,
     title: 'Real-Time Analytics',
     description: 'Track social conversations and metrics in real-time with our advanced analytics dashboard.',
-    color: 'bg-blue-50'
+    color: 'bg-black/5'
   },
   {
     icon: BoltIcon,
     title: 'Instant Alerts',
     description: 'Get notified instantly when potential leads or important discussions emerge.',
-    color: 'bg-yellow-50'
+    color: 'bg-black/5'
   },
   {
     icon: UserGroupIcon,
     title: 'Lead Generation',
     description: 'Convert social interactions into qualified leads with AI-powered intent detection.',
-    color: 'bg-green-50'
+    color: 'bg-black/5'
   },
   {
     icon: GlobeAltIcon,
     title: 'Multi-Platform',
     description: 'Monitor conversations across all major social platforms from a single dashboard.',
-    color: 'bg-purple-50'
+    color: 'bg-black/5'
   },
   {
     icon: ArrowTrendingUpIcon,
     title: 'Trend Analysis',
     description: 'Identify emerging trends and patterns in your industry conversations.',
-    color: 'bg-pink-50'
+    color: 'bg-black/5'
   },
   {
     icon: BellAlertIcon,
     title: 'Smart Notifications',
     description: 'Customizable alerts for keywords, competitors, and market opportunities.',
-    color: 'bg-orange-50'
+    color: 'bg-black/5'
   },
   {
     icon: ChatBubbleBottomCenterTextIcon,
     title: 'Sentiment Analysis',
     description: 'Understand the tone and context of social conversations with AI.',
-    color: 'bg-indigo-50'
+    color: 'bg-black/5'
   },
   {
     icon: PresentationChartLineIcon,
     title: 'Custom Reports',
     description: 'Generate detailed reports and insights tailored to your needs.',
-    color: 'bg-teal-50'
+    color: 'bg-black/5'
   }
 ];
 
@@ -70,8 +70,15 @@ const FeaturesSection = () => {
   });
 
   return (
-    <section id="features" className="py-24 bg-white">
-      <div className="container mx-auto px-6">
+    <section id="features" className="py-24 bg-[#FAFAFA] relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+        <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
@@ -91,14 +98,15 @@ const FeaturesSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
           {features.map((feature, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group relative bg-white p-8 rounded-2xl border border-black/5 hover:border-black/10 transition-all duration-300 hover:shadow-lg"
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group relative bg-white p-8 rounded-2xl border border-black/5 hover:border-black/20 transition-all duration-300 hover:shadow-lg"
             >
               <div className={`${feature.color} w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110`}>
                 <feature.icon className="w-6 h-6 text-black/80" />
