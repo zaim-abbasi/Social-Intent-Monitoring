@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,7 +9,7 @@ import {
   Legend
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../../components/Auth/AuthContext';
 import { platformConfig } from '../../../config/platformConfig';
 
@@ -24,8 +24,9 @@ ChartJS.register(
 
 const MentionsBarChart = () => {
   const { user } = useAuth();
+  const [key, setKey] = useState(0);
 
-  const getUserPlatformData = () => {
+  const getUserPlatformData = useCallback(() => {
     const labels = [];
     const data = [];
     const backgroundColor = [];
@@ -35,18 +36,16 @@ const MentionsBarChart = () => {
       const platformInfo = platformConfig[platform.name.toLowerCase()];
       if (platformInfo) {
         labels.push(platformInfo.name);
-        // Mock data - in production, this would come from your API
-        data.push(Math.floor(Math.random() * 100) + 50);
+        data.push(Math.floor(Math.random() * 80) + 20); // Keep data between 20-100
         backgroundColor.push(platformInfo.color.bar);
         hoverBackgroundColor.push(platformInfo.color.barHover);
       }
     });
 
-    // Calculate bar thickness based on number of platforms
-    const barThickness = Math.max(40 - (labels.length * 4), 20); // Decrease width as platforms increase
+    const barThickness = Math.max(40 - (labels.length * 4), 20);
 
     return { labels, data, backgroundColor, hoverBackgroundColor, barThickness };
-  };
+  }, [user]);
 
   const { labels, data, backgroundColor, hoverBackgroundColor, barThickness } = getUserPlatformData();
 
@@ -85,18 +84,21 @@ const MentionsBarChart = () => {
     scales: {
       y: {
         beginAtZero: true,
+        max: 100,
+        ticks: {
+          stepSize: 20,
+          font: {
+            family: "'Plus Jakarta Sans', sans-serif",
+            size: 12,
+            weight: '500'
+          },
+          color: '#6B7280',
+          padding: 8
+        },
         grid: {
           display: true,
           color: 'rgba(243, 244, 246, 0.6)',
           drawBorder: false,
-        },
-        ticks: {
-          font: {
-            family: "'Plus Jakarta Sans', sans-serif",
-            size: 12
-          },
-          color: '#6B7280',
-          padding: 8
         },
         border: {
           display: false
@@ -110,7 +112,7 @@ const MentionsBarChart = () => {
           font: {
             family: "'Plus Jakarta Sans', sans-serif",
             size: 12,
-            weight: '500'
+            weight: '600'
           },
           color: '#374151',
           padding: 8
@@ -145,14 +147,18 @@ const MentionsBarChart = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="w-full h-[250px]"
-    >
-      <Bar options={options} data={chartData} />
-    </motion.div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={key}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.4 }}
+        className="w-full h-[250px]"
+      >
+        <Bar options={options} data={chartData} />
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
