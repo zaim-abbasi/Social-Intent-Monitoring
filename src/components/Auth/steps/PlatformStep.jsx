@@ -17,16 +17,22 @@ const PlatformStep = ({ formData, updateFormData }) => {
       exit={{ opacity: 0, x: -20 }}
       className="h-full flex flex-col"
     >
-      <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-900">Choose Platforms</h3>
-        <p className="text-gray-600 mt-2">Select the platforms you want to monitor</p>
+      <div className="text-center mb-8">
+        <h3 className="text-3xl font-display font-bold text-gray-900 mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Choose Platforms
+        </h3>
+        <p className="text-gray-600 text-base font-medium">
+          Select the platforms you want to monitor for insights
+        </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-2">
-        <PlatformSelector
-          selected={formData.platforms}
-          onSelect={handlePlatformSelect}
-        />
+      <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+        <div className="bg-gray-50/70 rounded-xl p-6 border-2 border-gray-100">
+          <PlatformSelector
+            selected={formData.platforms}
+            onSelect={handlePlatformSelect}
+          />
+        </div>
       </div>
     </motion.div>
   );
