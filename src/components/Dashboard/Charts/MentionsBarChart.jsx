@@ -11,7 +11,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../../components/Auth/AuthContext';
-import { platformData } from '../../../utils/mockData';
+import { platformConfig } from '../../../config/platformConfig';
 
 ChartJS.register(
   CategoryScale,
@@ -31,11 +31,12 @@ const MentionsBarChart = () => {
     const backgroundColor = [];
     const hoverBackgroundColor = [];
 
-    user.platforms.forEach(platform => {
-      const platformInfo = platformData[platform.name.toLowerCase()];
+    user?.platforms?.forEach(platform => {
+      const platformInfo = platformConfig[platform.name.toLowerCase()];
       if (platformInfo) {
         labels.push(platformInfo.name);
-        data.push(platformInfo.mentionCount);
+        // Mock data - in production, this would come from your API
+        data.push(Math.floor(Math.random() * 100) + 50);
         backgroundColor.push(platformInfo.color.bar);
         hoverBackgroundColor.push(platformInfo.color.barHover);
       }
@@ -145,7 +146,7 @@ const MentionsBarChart = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="w-full h-[400px]"
+      className="w-full h-[300px]"
     >
       <Bar options={options} data={chartData} />
     </motion.div>
