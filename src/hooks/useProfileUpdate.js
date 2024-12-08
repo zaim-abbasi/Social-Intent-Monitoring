@@ -19,8 +19,7 @@ export const useProfileUpdate = (onClose) => {
       }
     } catch (error) {
       console.error('Profile update error:', error);
-      toast.error(error.message);
-      throw error;
+      toast.error(error.message || 'Failed to update profile');
     } finally {
       setIsSubmitting(false);
     }
