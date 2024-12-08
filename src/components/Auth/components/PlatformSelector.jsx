@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { 
   FaLinkedin, FaTwitter, FaMedium, 
   FaReddit, FaStackOverflow, FaYoutube, 
@@ -57,30 +58,39 @@ const platforms = [
 ];
 
 const PlatformSelector = ({ selected, onSelect }) => {
-  const handlePlatformClick = (e, id) => {
-    e.preventDefault();
-    onSelect(id);
-  };
-
   return (
-    <div className="grid grid-cols-2 gap-1.5">
+    <div className="grid grid-cols-2 gap-3">
       {platforms.map(({ id, name, icon: Icon, description }) => (
-        <button
+        <motion.button
           key={id}
           type="button"
-          onClick={(e) => handlePlatformClick(e, id)}
-          className={`p-3 rounded-lg border-2 flex items-center space-x-3 transition-all duration-300 hover:shadow-md ${
-            selected.includes(id)
-              ? 'border-primary bg-primary/5 text-primary'
-              : 'border-gray-200 hover:border-primary/30'
-          }`}
+          onClick={() => onSelect(id)}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className={`
+            p-4 rounded-xl border-2 flex items-center space-x-3 transition-all duration-300
+            ${selected.includes(id)
+              ? 'border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10'
+              : 'border-gray-200 hover:border-primary/30 text-gray-600 hover:bg-gray-50'
+            }
+          `}
         >
-          <Icon className="text-xl flex-shrink-0" />
-          <div className="text-left">
-            <p className="font-medium text-sm">{name}</p>
-            <p className="text-xs text-gray-500">{description}</p>
+          <div className={`
+            w-10 h-10 rounded-lg flex items-center justify-center
+            ${selected.includes(id) ? 'bg-primary/10' : 'bg-gray-100'}
+          `}>
+            <Icon className={`text-xl ${selected.includes(id) ? 'text-primary' : ''}`} />
           </div>
-        </button>
+          <div className="text-left flex-1 min-w-0">
+            <p className={`font-medium text-sm truncate ${selected.includes(id) ? 'text-primary' : 'text-gray-900'}`}>
+              {name}
+            </p>
+            <p className="text-xs text-gray-500 truncate">{description}</p>
+          </div>
+          {selected.includes(id) && (
+            <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+          )}
+        </motion.button>
       ))}
     </div>
   );
