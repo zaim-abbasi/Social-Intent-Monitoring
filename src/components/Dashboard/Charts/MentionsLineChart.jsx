@@ -3,55 +3,60 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../../components/Auth/AuthContext';
-import { platformData } from '../../../utils/mockData';
+import { generateTimelineData, generateDateLabels } from '../../../utils/mockData';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
-const MentionsBarChart = () => {
+const MentionsLineChart = () => {
   const { user } = useAuth();
 
-  const getUserPlatformData = () => {
-    const labels = [];
-    const data = [];
-    const backgroundColor = [];
-    const hoverBackgroundColor = [];
-
-    user.platforms.forEach(platform => {
-      const platformInfo = platformData[platform.name.toLowerCase()];
-      if (platformInfo) {
-        labels.push(platformInfo.name);
-        data.push(platformInfo.mentionCount);
-        backgroundColor.push(platformInfo.color.bar);
-        hoverBackgroundColor.push(platformInfo.color.barHover);
-      }
-    });
-
-    return { labels, data, backgroundColor, hoverBackgroundColor };
+  const data = {
+    labels: generateDateLabels(),
+    datasets: generateTimelineData(user.platforms)
   };
-
-  const { labels, data, backgroundColor, hoverBackgroundColor } = getUserPlatformData();
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
     plugins: {
       legend: {
-        display: false,
+        position: 'top',
+        align: 'end',
+        labels: {
+          boxWidth: 8,
+          boxHeight: 8,
+          usePointStyle: true,
+          pointStyle: 'circle',
+          padding: 20,
+          font: {
+            family: "'Plus Jakarta Sans', sans-serif",
+            size: 12,
+            weight: '600'
+          }
+        }
       },
       tooltip: {
         backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -70,11 +75,11 @@ const MentionsBarChart = () => {
         borderColor: '#E5E7EB',
         borderWidth: 1,
         displayColors: true,
-        boxWidth: 10,
-        boxHeight: 10,
+        boxWidth: 8,
+        boxHeight: 8,
         usePointStyle: true,
         callbacks: {
-          label: (context) => `${context.parsed.y} mentions`
+          label: (context) => `${context.dataset.label}: ${context.parsed.y} mentions`
         }
       }
     },
@@ -82,9 +87,8 @@ const MentionsBarChart = () => {
       y: {
         beginAtZero: true,
         grid: {
-          display: true,
           color: 'rgba(243, 244, 246, 0.6)',
-          drawBorder: false,
+          drawBorder: false
         },
         ticks: {
           font: {
@@ -92,7 +96,8 @@ const MentionsBarChart = () => {
             size: 12
           },
           color: '#6B7280',
-          padding: 8
+          padding: 8,
+          callback: (value) => `${value} mentions`
         },
         border: {
           display: false
@@ -126,20 +131,6 @@ const MentionsBarChart = () => {
     }
   };
 
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        data,
-        backgroundColor,
-        borderRadius: 8,
-        borderSkipped: false,
-        barThickness: 24,
-        hoverBackgroundColor
-      }
-    ]
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -147,9 +138,9 @@ const MentionsBarChart = () => {
       transition={{ duration: 0.6 }}
       className="w-full h-[400px]"
     >
-      <Bar options={options} data={chartData} />
+      <Line options={options} data={data} />
     </motion.div>
   );
 };
 
-export default MentionsBarChart;
+export default MentionsLineChart;
