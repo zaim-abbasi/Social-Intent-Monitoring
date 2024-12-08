@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Tab } from '@headlessui/react';
@@ -27,7 +27,7 @@ const ProfileEditor = ({ user, onClose }) => {
   const { login } = useAuth();
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await api.put('/api/user/profile', {
         name: values.name,
@@ -36,12 +36,18 @@ const ProfileEditor = ({ user, onClose }) => {
         keywordIntent: values.keywordIntent
       });
 
-      const { token, user: updatedUser } = response.data;
-      await login({ token, user: updatedUser });
-      toast.success('Profile updated successfully');
-      onClose();
+      if (response.data.token && response.data.user) {
+        await login(response.data);
+        toast.success('Profile updated successfully');
+        onClose();
+      } else {
+        throw new Error('Invalid server response');
+      }
     } catch (error) {
+      console.error('Profile update error:', error);
       toast.error(error.response?.data?.message || 'Failed to update profile');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -54,10 +60,10 @@ const ProfileEditor = ({ user, onClose }) => {
   return (
     <Formik
       initialValues={{
-        name: user.name,
+        name: user.name || '',
         newPassword: '',
         confirmPassword: '',
-        keywords: user.keywords.map(k => k.text),
+        keywords: user.keywords?.map(k => k.text) || [],
         keywordIntent: user.keywordIntent || ''
       }}
       validationSchema={validationSchema}

@@ -2,25 +2,13 @@ import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../utils/authUtils.js';
 
-export const verifyPassword = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
-    const isValid = await bcrypt.compare(req.body.password, user.password);
-    
-    if (!isValid) {
-      return res.status(401).json({ message: 'Invalid password' });
-    }
-    
-    res.json({ message: 'Password verified' });
-  } catch (error) {
-    console.error('Password verification error:', error);
-    res.status(500).json({ message: 'Error verifying password' });
-  }
-};
-
 export const updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     const { name, newPassword, keywords, keywordIntent } = req.body;
 
     // Update basic info
@@ -38,25 +26,91 @@ export const updateProfile = async (req, res) => {
       user.keywords = keywords.map(text => ({ text }));
     }
 
-    await user.save();
+    const updatedUser = await user.save();
 
     // Generate new token and return updated user info
-    const token = generateToken(user._id);
-    const updatedUser = {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      keywords: user.keywords,
-      keywordIntent: user.keywordIntent,
-      platforms: user.platforms,
-      team: user.team
+    const token = generateToken(updatedUser._id);
+    const sanitizedUser = {
+      id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      keywords: updatedUser.keywords,
+      keywordIntent: updatedUser.keywordIntent,
+      platforms: updatedUser.platforms,
+      team: updatedUser.team
     };
 
-    res.json({ token, user: updatedUser });
+    res.json({ token, user: sanitizedUser });
   } catch (error) {
     console.error('Profile update error:', error);
-    res.status(500).json({ message: 'Error updating profile' });
+    res.status(500).json({ 
+      message: error.message || 'Error updating profile',
+      error: process.env.NODE_ENV === 'development' ? error : undefined
+    });
   }
 };
 
-// ... (keep existing controller methods)
+export const getTrialStatus = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const daysRemaining = user.getTrialDaysRemaining();
+    res.json({ daysRemaining });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching trial status' });
+  }
+};
+
+export const getUserKeywords = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ keywords: user.keywords });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching keywords' });
+  }
+};
+
+export const addKeyword = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const { keyword } = req.body;
+    if (!keyword) {
+      return res.status(400).json({ message: 'Keyword is required' });
+    }
+
+    user.keywords.push({ text: keyword });
+    await user.save();
+
+    res.json({ keyword: user.keywords[user.keywords.length - 1] });
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding keyword' });
+  }
+};
+
+export const removeKeyword = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const keywordId = req.params.id;
+    user.keywords = user.keywords.filter(k => k._id.toString() !== keywordId);
+    await user.save();
+
+    res.json({ message: 'Keyword removed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing keyword' });
+  }
+};

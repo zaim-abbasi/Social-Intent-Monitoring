@@ -5,7 +5,6 @@ import {
   getUserKeywords,
   addKeyword,
   removeKeyword,
-  verifyPassword,
   updateProfile
 } from '../controllers/userController.js';
 
@@ -15,7 +14,6 @@ router.get('/trial-status', protect, getTrialStatus);
 router.get('/keywords', protect, getUserKeywords);
 router.post('/keywords', protect, addKeyword);
 router.delete('/keywords/:id', protect, removeKeyword);
-router.post('/verify-password', protect, verifyPassword);
 router.put('/profile', protect, updateProfile);
 
 export default router;
