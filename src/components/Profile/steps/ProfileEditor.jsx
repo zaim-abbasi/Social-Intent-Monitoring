@@ -27,6 +27,13 @@ const validationSchema = Yup.object().shape({
 const ProfileEditor = ({ user, onClose }) => {
   const { isSubmitting, updateProfile } = useProfileUpdate(onClose);
 
+  const handleSubmit = async (values) => {
+    await updateProfile({
+      ...values,
+      keywords: values.keywords
+    });
+  };
+
   return (
     <Formik
       initialValues={{
@@ -36,7 +43,7 @@ const ProfileEditor = ({ user, onClose }) => {
         keywords: user?.keywords?.map(k => k.text) || []
       }}
       validationSchema={validationSchema}
-      onSubmit={updateProfile}
+      onSubmit={handleSubmit}
     >
       {({ values, errors, touched, setFieldValue }) => (
         <Form className="space-y-6">
