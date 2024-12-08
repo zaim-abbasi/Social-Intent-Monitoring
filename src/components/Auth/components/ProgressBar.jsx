@@ -11,7 +11,7 @@ const ProgressBar = ({ currentStep, totalSteps }) => {
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.3 }}
-          className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-secondary"
+          className="absolute top-0 left-0 h-full bg-black"
         />
       </div>
     </div>
