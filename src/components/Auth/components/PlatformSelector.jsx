@@ -68,7 +68,7 @@ const PlatformSelector = ({ selected, onSelect }) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className={`
-            p-4 rounded-xl border-2 flex items-center space-x-3 transition-all duration-300
+            p-2 rounded-xl border-2 flex items-center space-x-3 transition-all duration-300
             ${selected.includes(id)
               ? 'border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10'
               : 'border-gray-200 hover:border-primary/30 text-gray-600 hover:bg-gray-50'

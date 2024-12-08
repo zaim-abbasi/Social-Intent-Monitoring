@@ -38,13 +38,12 @@ const TeamMemberInput = ({ members, onAdd, onRemove }) => {
               exit={{ opacity: 0, scale: 0.8 }}
               className="relative group"
             >
-              <div className="absolute inset-0 bg-primary/5 rounded-full transform scale-110" />
-              <div className="relative px-4 py-2 flex items-center space-x-2">
-                <div className="w-2 h-2 rounded-full bg-primary" />
+              <div className="flex items-center space-x-2 px-4 py-2 bg-primary/5 rounded-full">
+                <div className="w-2 h-2 rounded-full bg-primary"></div>
                 <span className="text-sm text-primary font-medium">{email}</span>
                 <button
                   onClick={() => onRemove(index)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 ml-1"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500 p-1"
                 >
                   <FiX className="w-4 h-4" />
                 </button>

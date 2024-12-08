@@ -18,7 +18,7 @@ const PlatformStep = ({ formData, updateFormData }) => {
       className="h-full flex flex-col"
     >
       <div className="text-center mb-8">
-        <h3 className="text-3xl font-display font-bold text-black mb-3">
+        <h3 className="text-3xl font-display font-bold text-black mb-0">
           Choose Platforms
         </h3>
         <p className="text-gray-600 text-base font-medium">
