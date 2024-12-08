@@ -173,7 +173,7 @@ const MentionsLineChart = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="w-full h-[300px]"
+      className="w-full h-[250px]"
     >
       <Line options={options} data={data} />
     </motion.div>

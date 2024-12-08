@@ -42,10 +42,13 @@ const MentionsBarChart = () => {
       }
     });
 
-    return { labels, data, backgroundColor, hoverBackgroundColor };
+    // Calculate bar thickness based on number of platforms
+    const barThickness = Math.max(40 - (labels.length * 4), 20); // Decrease width as platforms increase
+
+    return { labels, data, backgroundColor, hoverBackgroundColor, barThickness };
   };
 
-  const { labels, data, backgroundColor, hoverBackgroundColor } = getUserPlatformData();
+  const { labels, data, backgroundColor, hoverBackgroundColor, barThickness } = getUserPlatformData();
 
   const options = {
     responsive: true,
@@ -135,7 +138,7 @@ const MentionsBarChart = () => {
         backgroundColor,
         borderRadius: 8,
         borderSkipped: false,
-        barThickness: 24,
+        barThickness,
         hoverBackgroundColor
       }
     ]
@@ -146,7 +149,7 @@ const MentionsBarChart = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="w-full h-[300px]"
+      className="w-full h-[250px]"
     >
       <Bar options={options} data={chartData} />
     </motion.div>

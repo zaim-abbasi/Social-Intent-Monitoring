@@ -28,13 +28,13 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <MentionsCard title="Source of Mentions">
-            <div className="h-[400px] p-4">
+            <div className="h-[250px] p-4">
               <MentionsBarChart />
             </div>
           </MentionsCard>
 
           <MentionsCard title="Mentions Evolution">
-            <div className="h-[400px] p-4">
+            <div className="h-[250px] p-4">
               <MentionsLineChart />
             </div>
           </MentionsCard>
