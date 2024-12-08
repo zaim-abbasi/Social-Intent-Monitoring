@@ -1,8 +1,8 @@
 import React from 'react';
 import { 
-  FaLinkedin, FaTwitter, FaGithub, FaMedium, 
-  FaReddit, FaStackOverflow, FaYoutube, FaInstagram,
-  FaDiscord, FaSlack 
+  FaLinkedin, FaTwitter, FaMedium, 
+  FaReddit, FaStackOverflow, FaYoutube, 
+  FaInstagram, FaSlack 
 } from 'react-icons/fa';
 
 const platforms = [
@@ -19,12 +19,6 @@ const platforms = [
     description: 'Real-time conversations'
   },
   { 
-    id: 'github', 
-    name: 'GitHub', 
-    icon: FaGithub, 
-    description: 'Developer community'
-  },
-  { 
     id: 'medium', 
     name: 'Medium', 
     icon: FaMedium, 
@@ -35,12 +29,6 @@ const platforms = [
     name: 'Reddit', 
     icon: FaReddit, 
     description: 'Community discussions'
-  },
-  { 
-    id: 'stackoverflow', 
-    name: 'Stack Overflow', 
-    icon: FaStackOverflow, 
-    description: 'Developer Q&A'
   },
   { 
     id: 'youtube', 
@@ -54,37 +42,37 @@ const platforms = [
     icon: FaInstagram, 
     description: 'Visual content'
   },
-  { 
-    id: 'discord', 
-    name: 'Discord', 
-    icon: FaDiscord, 
-    description: 'Community chat'
+  {
+    id: 'stackoverflow',
+    name: 'Stack Overflow',
+    icon: FaStackOverflow,
+    description: 'Programming Q&A'
   },
   { 
     id: 'slack', 
     name: 'Slack', 
     icon: FaSlack, 
-    description: 'Business communication'
+    description: 'Team collaboration'
   }
 ];
 
 const PlatformSelector = ({ selected, onSelect }) => {
   const handlePlatformClick = (e, id) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     onSelect(id);
   };
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-1.5">
       {platforms.map(({ id, name, icon: Icon, description }) => (
         <button
           key={id}
-          type="button" // Prevent form submission
+          type="button"
           onClick={(e) => handlePlatformClick(e, id)}
-          className={`p-3 rounded-lg border-2 flex items-center space-x-3 ${
+          className={`p-3 rounded-lg border-2 flex items-center space-x-3 transition-all duration-300 hover:shadow-md ${
             selected.includes(id)
               ? 'border-primary bg-primary/5 text-primary'
-              : 'border-gray-200'
+              : 'border-gray-200 hover:border-primary/30'
           }`}
         >
           <Icon className="text-xl flex-shrink-0" />
