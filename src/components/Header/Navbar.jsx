@@ -25,24 +25,24 @@ const Navbar = () => {
   return (
     <motion.nav
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'glass-effect shadow-lg' : 'bg-transparent'
+        isScrolled ? 'glass-effect shadow-sm' : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container mx-auto px-6 py-3">
+      <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-4xl md:text-5xl font-display font-extrabold gradient-text tracking-tight">
+          <div className="text-3xl md:text-4xl font-display font-extrabold text-black tracking-tight">
             Trend
           </div>
           
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-10">
             {['Home', 'Features', 'Use Cases', 'Pricing', 'Resources'].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase().replace(' ', '-')}`}
-                className="text-gray-700 hover:text-primary font-medium transition-colors duration-200 tracking-wide"
+                className="text-gray-600 hover:text-black font-medium transition-colors duration-200 tracking-wide text-sm"
               >
                 {item}
               </a>
@@ -57,7 +57,7 @@ const Navbar = () => {
                 </span>
                 <button
                   onClick={logout}
-                  className="px-4 py-2 text-primary border-2 border-primary/20 rounded-lg hover:bg-primary/5 transition-colors"
+                  className="px-4 py-2 text-black border-2 border-black/10 rounded-lg hover:bg-black/5 transition-colors"
                 >
                   Logout
                 </button>
@@ -66,13 +66,13 @@ const Navbar = () => {
               <>
                 <button
                   onClick={() => handleAuthClick('login')}
-                  className="px-4 py-2 text-primary border-2 border-primary/20 rounded-lg hover:bg-primary/5 transition-colors"
+                  className="px-4 py-2 text-black border-2 border-black/10 rounded-lg hover:bg-black/5 transition-colors"
                 >
                   Login
                 </button>
                 <button
                   onClick={() => handleAuthClick('signup')}
-                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
+                  className="px-4 py-2 bg-black text-white rounded-lg hover:bg-black/90 transition-colors"
                 >
                   Get Started
                 </button>

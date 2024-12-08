@@ -15,7 +15,7 @@
 }
 
 body {
-  @apply bg-light text-dark font-sans antialiased;
+  @apply bg-[#FAFAFA] text-dark font-sans antialiased;
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
@@ -27,10 +27,6 @@ body {
 
 .glass-effect {
   @apply backdrop-blur-md bg-white/90;
-}
-
-.gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary;
 }
 
 /* Modern scrollbar styling */
@@ -63,8 +59,8 @@ body {
 
 /* Modern form styling */
 input:focus, textarea:focus {
-  @apply ring-2 ring-primary/30 border-primary outline-none;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  @apply ring-2 ring-black/30 border-black outline-none;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
 @layer components {
@@ -73,14 +69,41 @@ input:focus, textarea:focus {
   }
   
   .btn-primary {
-    @apply bg-primary hover:bg-secondary text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-glow transform hover:-translate-y-1;
+    @apply bg-black hover:bg-black/90 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1;
   }
   
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-primary border-2 border-primary/20 font-semibold px-8 py-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1;
+    @apply bg-white hover:bg-gray-50 text-black border-2 border-black/10 font-semibold px-8 py-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1;
   }
   
   .card {
     @apply bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300;
   }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
