@@ -99,7 +99,7 @@ const SignupForm = ({ onClose }) => {
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-700"
+                  className="px-6 py-2.5 border border-black/10 rounded-lg hover:bg-black/5 transition-colors text-black"
                 >
                   Back
                 </button>
@@ -108,7 +108,7 @@ const SignupForm = ({ onClose }) => {
                 type="submit"
                 onClick={() => formikProps.setFieldValue('_submitType', 'next')}
                 disabled={!formikProps.isValid || formikProps.isSubmitting}
-                className={`px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`px-6 py-2.5 bg-black text-white rounded-lg hover:bg-black/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                   step === 1 ? 'w-full' : 'ml-auto'
                 }`}
               >

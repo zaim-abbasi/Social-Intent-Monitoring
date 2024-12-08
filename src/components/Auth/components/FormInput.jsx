@@ -14,7 +14,7 @@ const FormInput = ({ label, error, touched, className, ...props }) => {
         <input
           className={clsx(
             'w-full px-4 py-2.5 border rounded-xl transition-all duration-200',
-            'focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none',
+            'focus:ring-2 focus:ring-black/20 focus:border-black focus:outline-none',
             'hover:border-gray-300',
             error && touched ? 'border-red-500' : 'border-gray-200',
             className
