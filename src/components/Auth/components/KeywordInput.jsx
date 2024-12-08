@@ -18,7 +18,7 @@ const KeywordInput = ({ keywords, onAdd, onRemove }) => {
           type="text"
           placeholder="Type a keyword and press Enter"
           onKeyDown={handleKeyDown}
-          className="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+          className="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           disabled={keywords.length >= 3}
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
@@ -34,7 +34,7 @@ const KeywordInput = ({ keywords, onAdd, onRemove }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => onRemove(index)}
-            className="bg-primary/10 text-primary px-4 py-2 rounded-full flex items-center hover:bg-primary/20 transition-colors"
+            className="bg-black/5 text-black px-4 py-2 rounded-full flex items-center hover:bg-black/10 transition-colors"
           >
             {keyword}
           </motion.button>
