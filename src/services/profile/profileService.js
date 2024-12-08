@@ -6,8 +6,7 @@ export class ProfileService {
       const response = await api.put('/api/user/profile', {
         name: userData.name,
         newPassword: userData.newPassword || undefined,
-        keywords: userData.keywords.map(keyword => ({ text: keyword })),
-        keywordIntent: userData.keywordIntent
+        keywords: userData.keywords.map(keyword => ({ text: keyword }))
       });
       
       return response.data;

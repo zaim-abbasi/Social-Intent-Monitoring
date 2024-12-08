@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { motion } from 'framer-motion';
-import { FiUser, FiLock, FiTag, FiInfo } from 'react-icons/fi';
+import { FiUser, FiLock, FiTag } from 'react-icons/fi';
 import FormInput from '../../Auth/components/FormInput';
 import KeywordInput from '../../Auth/components/KeywordInput';
 import { useProfileUpdate } from '../../../hooks/useProfileUpdate';
@@ -19,8 +19,9 @@ const validationSchema = Yup.object().shape({
     ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
-  keywordIntent: Yup.string(),
-  keywords: Yup.array().of(Yup.string())
+  keywords: Yup.array()
+    .of(Yup.string())
+    .max(3, 'Maximum 3 keywords allowed')
 });
 
 const ProfileEditor = ({ user, onClose }) => {
@@ -32,20 +33,19 @@ const ProfileEditor = ({ user, onClose }) => {
         name: user?.name || '',
         newPassword: '',
         confirmPassword: '',
-        keywords: user?.keywords?.map(k => k.text) || [],
-        keywordIntent: user?.keywordIntent || ''
+        keywords: user?.keywords?.map(k => k.text) || []
       }}
       validationSchema={validationSchema}
       onSubmit={updateProfile}
     >
       {({ values, errors, touched, setFieldValue }) => (
         <Form className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             {/* Basic Info Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-4 bg-gray-50 p-6 rounded-xl"
+              className="space-y-4 bg-gray-50/50 p-6 rounded-xl"
             >
               <div className="flex items-center space-x-2 mb-4">
                 <FiUser className="text-primary w-5 h-5" />
@@ -65,7 +65,7 @@ const ProfileEditor = ({ user, onClose }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="space-y-4 bg-gray-50 p-6 rounded-xl"
+              className="space-y-4 bg-gray-50/50 p-6 rounded-xl"
             >
               <div className="flex items-center space-x-2 mb-4">
                 <FiLock className="text-primary w-5 h-5" />
@@ -88,48 +88,37 @@ const ProfileEditor = ({ user, onClose }) => {
                 touched={touched.confirmPassword}
               />
             </motion.div>
-          </div>
 
-          {/* Keywords Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="space-y-4 bg-gray-50 p-6 rounded-xl"
-          >
-            <div className="flex items-center space-x-2 mb-4">
-              <FiTag className="text-primary w-5 h-5" />
-              <h3 className="text-lg font-semibold">Monitoring Keywords</h3>
-            </div>
-            <KeywordInput
-              keywords={values.keywords}
-              onAdd={(keyword) => {
-                setFieldValue('keywords', [...values.keywords, keyword]);
-              }}
-              onRemove={(index) => {
-                setFieldValue(
-                  'keywords',
-                  values.keywords.filter((_, i) => i !== index)
-                );
-              }}
-            />
-            <div className="mt-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <FiInfo className="text-primary w-4 h-4" />
-                <label className="text-sm font-medium text-gray-700">
-                  Keyword Intent
-                </label>
+            {/* Keywords Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="space-y-4 bg-gray-50/50 p-6 rounded-xl"
+            >
+              <div className="flex items-center space-x-2 mb-4">
+                <FiTag className="text-primary w-5 h-5" />
+                <h3 className="text-lg font-semibold">Monitoring Keywords</h3>
               </div>
-              <textarea
-                name="keywordIntent"
-                value={values.keywordIntent}
-                onChange={(e) => setFieldValue('keywordIntent', e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none"
-                rows="3"
-                placeholder="Describe your intent for monitoring these keywords"
+              <KeywordInput
+                keywords={values.keywords}
+                onAdd={(keyword) => {
+                  if (values.keywords.length < 3) {
+                    setFieldValue('keywords', [...values.keywords, keyword]);
+                  }
+                }}
+                onRemove={(index) => {
+                  setFieldValue(
+                    'keywords',
+                    values.keywords.filter((_, i) => i !== index)
+                  );
+                }}
               />
-            </div>
-          </motion.div>
+              {errors.keywords && touched.keywords && (
+                <div className="text-red-500 text-sm mt-1">{errors.keywords}</div>
+              )}
+            </motion.div>
+          </div>
 
           <div className="flex justify-end space-x-4 pt-6 border-t">
             <button

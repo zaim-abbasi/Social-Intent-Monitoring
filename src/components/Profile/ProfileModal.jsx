@@ -12,7 +12,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-2xl shadow-2xl"
+      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
       overlayClassName="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
     >
       <div className="relative">
@@ -29,9 +29,9 @@ const ProfileModal = ({ isOpen, onClose }) => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
         >
           <ProfileEditor user={user} onClose={onClose} />
         </motion.div>
