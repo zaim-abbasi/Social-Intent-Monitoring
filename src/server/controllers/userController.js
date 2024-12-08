@@ -1,80 +1,62 @@
 import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
+import { generateToken } from '../utils/authUtils.js';
 
-export const getTrialStatus = async (req, res) => {
+export const verifyPassword = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    const daysRemaining = user.getTrialDaysRemaining();
+    const isValid = await bcrypt.compare(req.body.password, user.password);
     
-    res.json({ daysRemaining });
+    if (!isValid) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+    
+    res.json({ message: 'Password verified' });
   } catch (error) {
-    console.error('Trial status error:', error);
-    res.status(500).json({ message: 'Error fetching trial status' });
+    console.error('Password verification error:', error);
+    res.status(500).json({ message: 'Error verifying password' });
   }
 };
 
-export const getUserKeywords = async (req, res) => {
+export const updateProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select('keywords');
-    res.json({ keywords: user.keywords });
-  } catch (error) {
-    console.error('Get keywords error:', error);
-    res.status(500).json({ message: 'Error fetching keywords' });
-  }
-};
-
-export const addKeyword = async (req, res) => {
-  try {
-    const { keyword } = req.body;
-    
-    if (!keyword) {
-      return res.status(400).json({ message: 'Keyword is required' });
-    }
-
     const user = await User.findById(req.user._id);
-    
-    // Check for duplicate keywords
-    const isDuplicate = user.keywords.some(k => 
-      k.text.toLowerCase() === keyword.toLowerCase()
-    );
-    
-    if (isDuplicate) {
-      return res.status(400).json({ message: 'Keyword already exists' });
+    const { name, newPassword, keywords, keywordIntent } = req.body;
+
+    // Update basic info
+    if (name) user.name = name;
+    if (keywordIntent !== undefined) user.keywordIntent = keywordIntent;
+
+    // Update password if provided
+    if (newPassword) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
     }
 
-    if (user.keywords.length >= 10) {
-      return res.status(400).json({ message: 'Maximum keywords limit reached (10)' });
+    // Update keywords if provided
+    if (keywords) {
+      user.keywords = keywords.map(text => ({ text }));
     }
 
-    const newKeyword = {
-      text: keyword,
-      createdAt: new Date()
+    await user.save();
+
+    // Generate new token and return updated user info
+    const token = generateToken(user._id);
+    const updatedUser = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      keywords: user.keywords,
+      keywordIntent: user.keywordIntent,
+      platforms: user.platforms,
+      team: user.team
     };
 
-    user.keywords.push(newKeyword);
-    await user.save();
-
-    res.status(201).json({ keyword: newKeyword });
+    res.json({ token, user: updatedUser });
   } catch (error) {
-    console.error('Add keyword error:', error);
-    res.status(500).json({ message: 'Error adding keyword' });
+    console.error('Profile update error:', error);
+    res.status(500).json({ message: 'Error updating profile' });
   }
 };
 
-export const removeKeyword = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
-    const keywordExists = user.keywords.some(k => k._id.toString() === req.params.id);
-    
-    if (!keywordExists) {
-      return res.status(404).json({ message: 'Keyword not found' });
-    }
-
-    user.keywords = user.keywords.filter(k => k._id.toString() !== req.params.id);
-    await user.save();
-    
-    res.json({ message: 'Keyword removed successfully' });
-  } catch (error) {
-    console.error('Remove keyword error:', error);
-    res.status(500).json({ message: 'Error removing keyword' });
-  }
-};
+// ... (keep existing controller methods)
