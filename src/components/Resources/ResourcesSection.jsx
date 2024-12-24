@@ -28,7 +28,7 @@ const ResourcesSection = () => {
   };
 
   return (
-    <section id="resources" className="py-24">
+    <section id="resources" className="py-5">
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           ref={ref}
@@ -37,9 +37,6 @@ const ResourcesSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-2 rounded-full bg-black/5 text-black font-medium text-sm mb-6">
-            Resources
-          </span>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-black">
             Resources & Insights
           </h2>

@@ -60,9 +60,6 @@ const PricingSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-2 rounded-full bg-black/5 text-black font-medium text-sm mb-6">
-            Pricing Plans
-          </span>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-black">
             Simple, Transparent Pricing
           </h2>
