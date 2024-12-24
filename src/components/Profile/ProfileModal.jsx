@@ -12,26 +12,25 @@ const ProfileModal = ({ isOpen, onClose }) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
+      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl w-full max-w-md max-h-[600px] overflow-hidden shadow-2xl"
       overlayClassName="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
     >
-      <div className="relative">
-        <button
-          onClick={onClose}
-          className="absolute right-0 top-0 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-all"
-        >
-          <FiX className="w-5 h-5" />
-        </button>
-
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
-          <p className="text-gray-600 mt-1">Update your profile information</p>
+      <div className="flex flex-col h-full">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+          <h2 className="text-base font-semibold text-black">Profile Settings</h2>
+          <button
+            onClick={onClose}
+            className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-all"
+          >
+            <FiX className="w-4 h-4" />
+          </button>
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
+          className="flex-1 overflow-y-auto"
         >
           <ProfileEditor user={user} onClose={onClose} />
         </motion.div>

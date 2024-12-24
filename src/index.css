@@ -14,15 +14,24 @@
   --font-display: 'Outfit', system-ui, sans-serif;
 }
 
+html {
+  height: 100%;
+  overflow-x: hidden;
+}
+
 body {
   @apply bg-[#FAFAFA] text-dark font-sans antialiased;
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
 #root {
   min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .glass-effect {
@@ -52,9 +61,15 @@ body {
   background-color: rgba(203, 213, 225, 0.6);
 }
 
-/* Hide horizontal scrollbar */
-.custom-scrollbar {
-  overflow-x: hidden;
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* Modern form styling */

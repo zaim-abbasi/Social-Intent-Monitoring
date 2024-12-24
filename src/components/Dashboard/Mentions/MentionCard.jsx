@@ -28,23 +28,31 @@ const MentionCard = ({ platform, title, description, sentiment }) => {
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className="bg-white rounded-xl shadow-lg p-6 border border-primary/20"
+      className="relative bg-white rounded-2xl p-6 border border-black/5 hover:border-black/20 transition-all duration-300 hover:shadow-lg overflow-hidden group"
     >
+      {/* Decorative elements */}
+      <div className="absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+      
       <div className="flex items-start justify-between mb-4">
-        <Icon className="text-2xl text-gray-600" />
+        <div className="bg-black/5 p-3 rounded-xl">
+          <Icon className="text-xl text-black" />
+        </div>
         <div className="flex items-center space-x-2">
           <div className={`w-2 h-2 rounded-full ${sentimentColors[sentiment]}`} />
           <span className="text-sm text-gray-600 capitalize">{sentiment}</span>
         </div>
       </div>
 
-      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{title}</h3>
+      <h3 className="font-semibold text-black mb-2 line-clamp-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4 line-clamp-3">{description}</p>
 
-      <button className="text-primary hover:text-secondary transition-colors flex items-center text-sm font-medium">
+      <motion.button
+        whileHover={{ x: 4 }}
+        className="inline-flex items-center text-black font-medium text-sm group/btn"
+      >
         See More
         <svg
-          className="w-4 h-4 ml-1"
+          className="w-4 h-4 ml-1 transform transition-transform group-hover/btn:translate-x-1"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -56,7 +64,7 @@ const MentionCard = ({ platform, title, description, sentiment }) => {
             d="M9 5l7 7-7 7"
           />
         </svg>
-      </button>
+      </motion.button>
     </motion.div>
   );
 };

@@ -56,13 +56,12 @@ const useCases = [
 ];
 
 const UseCasesSection = () => {
+  const [selectedUseCase, setSelectedUseCase] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
-
-  const [selectedUseCase, setSelectedUseCase] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleUseCaseClick = (useCase) => {
     setSelectedUseCase(useCase);
@@ -70,14 +69,7 @@ const UseCasesSection = () => {
   };
 
   return (
-    <section id="use-cases" className="py-24 bg-[#FAFAFA] relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
-      </div>
-
+    <section id="use-cases" className="py-24">
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           ref={ref}

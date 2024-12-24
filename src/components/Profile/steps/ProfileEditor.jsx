@@ -6,6 +6,7 @@ import { FiUser, FiLock, FiTag } from 'react-icons/fi';
 import FormInput from '../../Auth/components/FormInput';
 import KeywordInput from '../../Auth/components/KeywordInput';
 import { useProfileUpdate } from '../../../hooks/useProfileUpdate';
+import { toast } from 'react-hot-toast';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -15,23 +16,30 @@ const validationSchema = Yup.object().shape({
     .min(8, 'Password must be at least 8 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+      'Must include uppercase, lowercase, and number'
     ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
   keywords: Yup.array()
-    .of(Yup.string())
     .max(3, 'Maximum 3 keywords allowed')
 });
 
 const ProfileEditor = ({ user, onClose }) => {
   const { isSubmitting, updateProfile } = useProfileUpdate(onClose);
 
-  const handleSubmit = async (values) => {
-    await updateProfile({
-      ...values,
-      keywords: values.keywords
-    });
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      await updateProfile({
+        ...values,
+        keywords: values.keywords
+      });
+      toast.success('Profile updated successfully');
+      onClose();
+    } catch (error) {
+      toast.error(error.message || 'Failed to update profile');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -45,67 +53,69 @@ const ProfileEditor = ({ user, onClose }) => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ values, errors, touched, setFieldValue }) => (
-        <Form className="space-y-6">
-          <div className="grid grid-cols-1 gap-6">
-            {/* Basic Info Section */}
+      {({ values, errors, touched, setFieldValue, dirty, isValid }) => (
+        <Form className="p-3">
+          <div className="space-y-3">
+            {/* Basic Info */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-4 bg-gray-50/50 p-6 rounded-xl"
+              className="bg-black/5 p-3 rounded-lg"
             >
-              <div className="flex items-center space-x-2 mb-4">
-                <FiUser className="text-primary w-5 h-5" />
-                <h3 className="text-lg font-semibold">Basic Information</h3>
+              <div className="flex items-center space-x-2 mb-2">
+                <FiUser className="text-black w-3.5 h-3.5" />
+                <h3 className="text-sm font-medium text-black">Basic Info</h3>
               </div>
               <FormInput
                 name="name"
-                label="Full Name"
-                placeholder="Enter your full name"
+                placeholder="Full Name"
                 error={errors.name}
                 touched={touched.name}
+                className="bg-white text-sm py-2"
               />
             </motion.div>
 
-            {/* Password Section */}
+            {/* Password Update */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="space-y-4 bg-gray-50/50 p-6 rounded-xl"
+              className="bg-black/5 p-3 rounded-lg"
             >
-              <div className="flex items-center space-x-2 mb-4">
-                <FiLock className="text-primary w-5 h-5" />
-                <h3 className="text-lg font-semibold">Password Update</h3>
+              <div className="flex items-center space-x-2 mb-2">
+                <FiLock className="text-black w-3.5 h-3.5" />
+                <h3 className="text-sm font-medium text-black">Password</h3>
               </div>
-              <FormInput
-                name="newPassword"
-                type="password"
-                label="New Password"
-                placeholder="Enter new password"
-                error={errors.newPassword}
-                touched={touched.newPassword}
-              />
-              <FormInput
-                name="confirmPassword"
-                type="password"
-                label="Confirm Password"
-                placeholder="Confirm new password"
-                error={errors.confirmPassword}
-                touched={touched.confirmPassword}
-              />
+              <div className="grid gap-2">
+                <FormInput
+                  name="newPassword"
+                  type="password"
+                  placeholder="New Password"
+                  error={errors.newPassword}
+                  touched={touched.newPassword}
+                  className="bg-white text-sm py-2"
+                />
+                <FormInput
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirm Password"
+                  error={errors.confirmPassword}
+                  touched={touched.confirmPassword}
+                  className="bg-white text-sm py-2"
+                />
+              </div>
             </motion.div>
 
-            {/* Keywords Section */}
+            {/* Keywords */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="space-y-4 bg-gray-50/50 p-6 rounded-xl"
+              className="bg-black/5 p-3 rounded-lg"
             >
-              <div className="flex items-center space-x-2 mb-4">
-                <FiTag className="text-primary w-5 h-5" />
-                <h3 className="text-lg font-semibold">Monitoring Keywords</h3>
+              <div className="flex items-center space-x-2 mb-2">
+                <FiTag className="text-black w-3.5 h-3.5" />
+                <h3 className="text-sm font-medium text-black">Keywords</h3>
               </div>
               <KeywordInput
                 keywords={values.keywords}
@@ -122,27 +132,30 @@ const ProfileEditor = ({ user, onClose }) => {
                 }}
               />
               {errors.keywords && touched.keywords && (
-                <div className="text-red-500 text-sm mt-1">{errors.keywords}</div>
+                <div className="text-red-500 text-xs mt-1">{errors.keywords}</div>
               )}
             </motion.div>
           </div>
 
-          <div className="flex justify-end space-x-4 pt-6 border-t">
-            <button
+          <div className="flex justify-end space-x-2 mt-4 pt-3 border-t border-gray-100">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               type="button"
               onClick={onClose}
-              className="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              disabled={isSubmitting}
+              className="px-4 py-2 text-xs font-medium text-black bg-black/5 rounded-lg hover:bg-black/10 transition-colors"
             >
               Cancel
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               type="submit"
-              disabled={isSubmitting}
-              className="px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-colors disabled:opacity-50"
+              disabled={isSubmitting || !dirty || !isValid}
+              className="px-4 py-2 text-xs font-medium text-white bg-black rounded-lg hover:bg-black/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Saving Changes...' : 'Save Changes'}
-            </button>
+              {isSubmitting ? 'Saving...' : 'Save Changes'}
+            </motion.button>
           </div>
         </Form>
       )}

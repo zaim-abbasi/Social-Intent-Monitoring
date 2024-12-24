@@ -12,21 +12,21 @@ const KeywordInput = ({ keywords, onAdd, onRemove }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="relative">
         <input
           type="text"
           placeholder="Type a keyword and press Enter"
           onKeyDown={handleKeyDown}
-          className="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+          className="w-full pl-3 pr-10 py-1.5 text-sm border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           disabled={keywords.length >= 3}
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-          <PlusIcon className="w-6 h-6" />
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+          <PlusIcon className="w-4 h-4" />
         </div>
       </div>
       
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5">
         {keywords.map((keyword, index) => (
           <motion.button
             key={index}
@@ -34,7 +34,7 @@ const KeywordInput = ({ keywords, onAdd, onRemove }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => onRemove(index)}
-            className="bg-black/5 text-black px-4 py-2 rounded-full flex items-center hover:bg-black/10 transition-colors"
+            className="bg-black/5 text-black px-2 py-1 rounded-full flex items-center text-xs hover:bg-black/10 transition-colors"
           >
             {keyword}
           </motion.button>
@@ -42,7 +42,7 @@ const KeywordInput = ({ keywords, onAdd, onRemove }) => {
       </div>
       
       {keywords.length < 3 && (
-        <p className="text-sm text-gray-500">
+        <p className="text-xs text-gray-500">
           You can add up to {3 - keywords.length} more keyword{3 - keywords.length !== 1 ? 's' : ''}.
         </p>
       )}

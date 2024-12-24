@@ -15,7 +15,7 @@ const NotificationItem = ({ notification, onRead }) => {
     <motion.div
       whileHover={{ x: 4 }}
       onClick={handleClick}
-      className={`w-full px-4 py-3 text-left flex items-start space-x-3 hover:bg-gray-50 transition-all cursor-pointer overflow-hidden ${
+      className={`w-full px-4 py-3 text-left flex items-start space-x-3 hover:bg-gray-50 transition-all cursor-pointer ${
         notification.unread ? 'bg-blue-50/50' : ''
       }`}
     >

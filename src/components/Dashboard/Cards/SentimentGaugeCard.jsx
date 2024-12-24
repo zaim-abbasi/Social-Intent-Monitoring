@@ -4,11 +4,11 @@ import { Arc } from '@visx/shape';
 import { Group } from '@visx/group';
 
 const SentimentGaugeCard = ({ score = 75 }) => {
-  const width = 160;
-  const height = 90;
+  const width = 120;
+  const height = 60;
   const centerX = width / 2;
   const centerY = height - 10;
-  const radius = 70;
+  const radius = 50;
   const startAngle = Math.PI;
   const endAngle = 2 * Math.PI;
   const scoreAngle = startAngle + (score / 100) * Math.PI;
@@ -16,12 +16,12 @@ const SentimentGaugeCard = ({ score = 75 }) => {
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className="relative bg-white rounded-2xl shadow-lg p-4 overflow-hidden"
+      className="relative bg-white rounded-2xl p-4 border border-black/5 hover:border-black/20 transition-all duration-300 hover:shadow-lg overflow-hidden group"
     >
-      <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+      <div className="absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
       
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-base font-semibold text-gray-900">Global Score</h3>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-medium text-gray-900">Intent Score</h3>
         <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600">
           Last 7 days
         </span>
@@ -36,7 +36,7 @@ const SentimentGaugeCard = ({ score = 75 }) => {
               endAngle={endAngle}
               fill="none"
               stroke="#e2e8f0"
-              strokeWidth={8}
+              strokeWidth={6}
             />
             <Arc
               radius={radius}
@@ -44,7 +44,7 @@ const SentimentGaugeCard = ({ score = 75 }) => {
               endAngle={scoreAngle}
               fill="none"
               stroke="url(#gradient)"
-              strokeWidth={8}
+              strokeWidth={6}
               strokeLinecap="round"
             />
             <defs>
@@ -56,9 +56,9 @@ const SentimentGaugeCard = ({ score = 75 }) => {
             </defs>
           </Group>
         </svg>
-        <div className="flex items-baseline -mt-2">
-          <span className="text-2xl font-bold text-gray-900">{score}</span>
-          <span className="text-sm text-gray-500 ml-1">/ 100</span>
+        <div className="flex items-baseline">
+          <span className="text-2xl font-bold text-black">{score}</span>
+          <span className="text-xs text-gray-500 ml-1">/ 100</span>
         </div>
       </div>
     </motion.div>

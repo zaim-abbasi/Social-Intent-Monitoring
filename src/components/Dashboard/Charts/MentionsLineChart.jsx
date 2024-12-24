@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +11,6 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../../components/Auth/AuthContext';
 import { platformConfig } from '../../../config/platformConfig';
 import { format, subDays } from 'date-fns';
@@ -27,9 +26,8 @@ ChartJS.register(
   Filler
 );
 
-const MentionsLineChart = () => {
+const MentionsLineChart = ({ refreshKey }) => {
   const { user } = useAuth();
-  const [key, setKey] = useState(0);
 
   const generateDateLabels = useCallback((days = 7) => {
     return Array.from({ length: days }).map((_, i) => 
@@ -37,8 +35,8 @@ const MentionsLineChart = () => {
     );
   }, []);
 
-  const generateTimelineData = useCallback(() => {
-    return user?.platforms?.map(platform => {
+  const { labels, datasets } = useMemo(() => {
+    const datasets = user?.platforms?.map(platform => {
       const platformInfo = platformConfig[platform.name.toLowerCase()];
       if (!platformInfo) return null;
 
@@ -54,22 +52,30 @@ const MentionsLineChart = () => {
         backgroundColor: platformInfo.color.fill,
         fill: true,
         tension: 0.4,
-        borderWidth: 3,
-        pointRadius: 4,
+        borderWidth: 2,
+        pointRadius: 0,
         pointHoverRadius: 6,
         pointBackgroundColor: 'white',
         pointBorderColor: platformInfo.color.line,
         pointBorderWidth: 2,
-        pointHoverBorderWidth: 3,
-        pointHoverBackgroundColor: 'white'
+        pointHoverBorderWidth: 2,
+        pointHoverBackgroundColor: 'white',
+        segment: {
+          borderColor: ctx => {
+            const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+            gradient.addColorStop(0, platformInfo.color.line);
+            gradient.addColorStop(1, platformInfo.color.lineEnd || platformInfo.color.line);
+            return gradient;
+          }
+        }
       };
-    }).filter(Boolean);
-  }, [user]);
+    }).filter(Boolean) || [];
 
-  const data = {
-    labels: generateDateLabels(),
-    datasets: generateTimelineData()
-  };
+    return {
+      labels: generateDateLabels(),
+      datasets
+    };
+  }, [user, generateDateLabels, refreshKey]); // Add refreshKey to dependencies
 
   const options = {
     responsive: true,
@@ -83,40 +89,40 @@ const MentionsLineChart = () => {
         position: 'top',
         align: 'end',
         labels: {
-          boxWidth: 8,
-          boxHeight: 8,
+          boxWidth: 6,
+          boxHeight: 6,
           usePointStyle: true,
           pointStyle: 'circle',
-          padding: 20,
+          padding: 16,
           font: {
             family: "'Plus Jakarta Sans', sans-serif",
-            size: 12,
-            weight: '600'
+            size: 11,
+            weight: '500'
           }
         }
       },
       tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
         titleColor: '#1F2937',
         bodyColor: '#4B5563',
         padding: 12,
         bodyFont: {
           family: "'Plus Jakarta Sans', sans-serif",
-          size: 14
+          size: 13
         },
         titleFont: {
           family: "'Plus Jakarta Sans', sans-serif",
-          size: 14,
+          size: 13,
           weight: '600'
         },
         borderColor: '#E5E7EB',
         borderWidth: 1,
         displayColors: true,
-        boxWidth: 8,
-        boxHeight: 8,
+        boxWidth: 6,
+        boxHeight: 6,
         usePointStyle: true,
         callbacks: {
-          label: (context) => `${context.dataset.label}: ${context.parsed.y} mentions`
+          label: (context) => `${context.dataset.label}: ${context.parsed.y} trends`
         }
       }
     },
@@ -124,66 +130,60 @@ const MentionsLineChart = () => {
       y: {
         beginAtZero: true,
         max: 100,
-        ticks: {
-          stepSize: 20,
-          font: {
-            family: "'Plus Jakarta Sans', sans-serif",
-            size: 12,
-            weight: '500'
-          },
-          color: '#6B7280',
-          padding: 8,
-          callback: (value) => `${value} mentions`
-        },
         grid: {
           color: 'rgba(243, 244, 246, 0.6)',
           drawBorder: false
         },
         border: {
           display: false
+        },
+        ticks: {
+          stepSize: 25,
+          font: {
+            family: "'Plus Jakarta Sans', sans-serif",
+            size: 11,
+            weight: '500'
+          },
+          color: '#6B7280',
+          padding: 8
         }
       },
       x: {
         grid: {
           display: false
         },
+        border: {
+          display: false
+        },
         ticks: {
           font: {
             family: "'Plus Jakarta Sans', sans-serif",
-            size: 12,
-            weight: '600'
+            size: 11,
+            weight: '500'
           },
           color: '#374151',
           padding: 8
-        },
-        border: {
-          display: false
         }
       }
     },
     layout: {
       padding: {
-        top: 20,
-        bottom: 20,
-        left: 20,
-        right: 20
+        top: 8,
+        bottom: 8,
+        left: 8,
+        right: 8
       }
+    },
+    animation: {
+      duration: 750,
+      easing: 'easeInOutQuart'
     }
   };
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={key}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.4 }}
-        className="w-full h-[250px]"
-      >
-        <Line options={options} data={data} />
-      </motion.div>
-    </AnimatePresence>
+    <div className="w-full h-full">
+      <Line options={options} data={{ labels, datasets }} />
+    </div>
   );
 };
 

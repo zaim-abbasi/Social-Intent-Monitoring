@@ -6,16 +6,16 @@ const FormInput = ({ label, error, touched, className, ...props }) => {
   return (
     <div className="space-y-1">
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-xs font-medium text-gray-700">
           {label}
         </label>
       )}
       <div className="relative">
         <input
           className={clsx(
-            'w-full px-4 py-2.5 border rounded-xl transition-all duration-200',
+            'w-full px-3 py-1.5 border rounded-lg transition-all duration-200',
             'focus:ring-2 focus:ring-black/20 focus:border-black focus:outline-none',
-            'hover:border-gray-300',
+            'hover:border-gray-300 text-sm',
             error && touched ? 'border-red-500' : 'border-gray-200',
             className
           )}
@@ -26,7 +26,7 @@ const FormInput = ({ label, error, touched, className, ...props }) => {
         <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-red-500 text-sm mt-1"
+          className="text-red-500 text-xs mt-1"
         >
           {error}
         </motion.p>
