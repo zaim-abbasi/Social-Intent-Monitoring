@@ -63,28 +63,6 @@ const CompanyLogos = () => {
             </motion.div>
           ))}
         </div>
-
-        <div className="flex items-center justify-center gap-8 mt-12">
-          <div className="flex items-center gap-2">
-            <div className="flex text-yellow-400 text-xl">
-              {'★'.repeat(5)}
-            </div>
-            <span className="text-gray-600">
-              <span className="font-semibold text-black">4.9/5</span> rating
-            </span>
-          </div>
-          <div className="w-px h-8 bg-gray-200" />
-          <div className="flex -space-x-4">
-            {[...Array(4)].map((_, i) => (
-              <img
-                key={i}
-                className="w-12 h-12 rounded-full border-4 border-white"
-                src={`https://i.pravatar.cc/100?img=${i + 1}`}
-                alt="User avatar"
-              />
-            ))}
-          </div>
-        </div>
       </div>
     </motion.div>
   );
