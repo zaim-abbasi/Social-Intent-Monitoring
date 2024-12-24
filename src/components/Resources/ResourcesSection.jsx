@@ -28,7 +28,7 @@ const ResourcesSection = () => {
   };
 
   return (
-    <section id="resources" className="py-5">
+    <section id="resources" className="py-24">
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           ref={ref}
